@@ -1,0 +1,157 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: dahu-store-credit\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"PO-Revision-Date: 2026-10-08 11:25+0000\n"
+"X-Generator: dahu i18n-build\n"
+
+#: includes/class-dahu-store-credit-admin.php:109
+msgid "Active store credits"
+msgstr "Avoirs actifs"
+
+#: includes/class-dahu-store-credit-admin.php:198
+msgid "Amount used"
+msgstr "Montant utilisé"
+
+#: includes/class-dahu-store-credit-admin.php:94
+msgid "Automatically carry the remaining balance forward after payment"
+msgstr "Reporter automatiquement le solde restant après le paiement"
+
+#: dahu-store-credit.php:93
+msgid "By Hugo Vial-Jaime — Dahu-Concept"
+msgstr "Par Hugo Vial-Jaime — Dahu-Concept"
+
+#: includes/class-dahu-store-credit-admin.php:141
+msgid "Code"
+msgstr "Code"
+
+#: includes/class-dahu-store-credit-admin.php:142
+msgid "Current balance"
+msgstr "Solde actuel"
+
+#: includes/class-dahu-store-credit-admin.php:31 includes/class-dahu-store-credit-admin.php:32
+msgid "Dahu Store Credit"
+msgstr "Dahu Store Credit"
+
+#: includes/class-dahu-store-credit-admin.php:170
+msgid "Dahu Store Credit history"
+msgstr "Historique des avoirs"
+
+#: dahu-store-credit.php:53
+msgid "Dahu Store Credit requires WooCommerce."
+msgstr "Dahu Store Credit nécessite WooCommerce."
+
+#: includes/class-dahu-store-credit-admin.php:84
+msgid "Dahu Store Credit turns a coupon into a balance a customer spends over several orders, instead of one that is consumed whole on the first."
+msgstr "Dahu Store Credit transforme un code promo en un solde que le client dépense sur plusieurs commandes, au lieu d’un code consommé en entier dès la première."
+
+#. translators: %s: coupon code */
+#: includes/class-dahu-store-credit-core.php:403
+msgid "Dahu Store Credit: could not restore “%s”, coupon not found."
+msgstr "Dahu Store Credit : impossible de recréditer « %s », code promo introuvable."
+
+#. translators: %s: coupon code */
+#: includes/class-dahu-store-credit-core.php:286
+msgid "Dahu Store Credit: coupon “%s” no longer exists; nothing was processed."
+msgstr "Dahu Store Credit : le code promo « %s » n’existe plus, rien n’a été traité."
+
+#: includes/class-dahu-store-credit-admin.php:196
+msgid "Date"
+msgstr "Date"
+
+#: includes/class-dahu-store-credit-admin.php:102
+msgid "Days added to the expiry date on each partial use. 0 leaves the expiry date alone."
+msgstr "Jours ajoutés à la date d’expiration à chaque utilisation partielle. 0 laisse la date inchangée."
+
+#: includes/class-dahu-store-credit-admin.php:144
+msgid "Email restriction"
+msgstr "Restriction par e-mail"
+
+#: includes/class-dahu-store-credit-admin.php:90
+msgid "Enable Dahu Store Credit"
+msgstr "Activer Dahu Store Credit"
+
+#: includes/class-dahu-store-credit-admin.php:143
+msgid "Expiry date"
+msgstr "Date d’expiration"
+
+#: includes/class-dahu-store-credit-admin.php:199
+msgid "New balance"
+msgstr "Nouveau solde"
+
+#: includes/class-dahu-store-credit-admin.php:188
+msgid "No history yet."
+msgstr "Aucun historique pour l’instant."
+
+#: includes/class-dahu-store-credit-admin.php:133
+msgid "No store credit recorded yet."
+msgstr "Aucun avoir enregistré pour l’instant."
+
+#: includes/class-dahu-store-credit-admin.php:197
+msgid "Order"
+msgstr "Commande"
+
+#: dahu-store-credit.php:98
+msgid "Plugin website"
+msgstr "Site de l’extension"
+
+#: dahu-store-credit.php:72
+msgid "Settings"
+msgstr "Réglages"
+
+#: includes/class-dahu-store-credit-admin.php:81
+msgid "Store credit"
+msgstr "Avoir"
+
+#. translators: 1: coupon code, 2: consumed amount, 3: remaining balance */
+#: includes/class-dahu-store-credit-core.php:348
+msgid "Store credit %1$s: %2$s used, %3$s carried forward."
+msgstr "Avoir %1$s : %2$s utilisés, %3$s reportés."
+
+#. translators: 1: coupon code, 2: restored amount */
+#: includes/class-dahu-store-credit-core.php:448
+msgid "Store credit %1$s: order cancelled or refunded, %2$s returned to the coupon."
+msgstr "Avoir %1$s : commande annulée ou remboursée, %2$s rendus au code promo."
+
+#. translators: %s: coupon code */
+#: includes/class-dahu-store-credit-core.php:358
+msgid "Store credit %s fully used."
+msgstr "Avoir %s entièrement utilisé."
+
+#: includes/class-dahu-store-credit-core.php:58
+msgid "Store credit (balance carries forward)"
+msgstr "Avoir (le solde est reporté)"
+
+#: includes/class-dahu-store-credit-core.php:236
+msgid "The balance of this store credit is currently too low, or already reserved by another order awaiting payment."
+msgstr "Le solde de cet avoir est trop faible, ou déjà réservé par une autre commande en attente de paiement."
+
+#: includes/class-dahu-store-credit-core.php:66
+msgid "This coupon is marked as store credit but is not of the “Fixed cart discount” type. Dahu Store Credit will ignore it."
+msgstr "Ce code promo est marqué comme avoir mais n’est pas de type « Remise fixe sur le panier ». Dahu Store Credit l’ignorera."
+
+#: includes/class-dahu-store-credit-admin.php:183
+msgid "This coupon is not marked as store credit."
+msgstr "Ce code promo n’est pas marqué comme avoir."
+
+#: includes/class-dahu-store-credit-admin.php:157
+msgid "Unlimited"
+msgstr "Illimitée"
+
+#: includes/class-dahu-store-credit-admin.php:99
+msgid "Validity extension"
+msgstr "Prolongation de validité"
+
+#. translators: %s: plugin version number. */
+#: dahu-store-credit.php:87
+msgid "Version %s"
+msgstr "Version %s"
+
+#: includes/class-dahu-store-credit-core.php:59
+msgid "When ticked, whatever is left of this fixed-cart coupon is carried forward after payment instead of being lost."
+msgstr "Si la case est cochée, ce qui reste de ce code promo à montant fixe est reporté après le paiement au lieu d’être perdu."
+
