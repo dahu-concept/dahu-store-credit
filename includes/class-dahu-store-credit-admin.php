@@ -48,10 +48,22 @@ class Dahu_Store_Credit_Admin {
 			return;
 		}
 
+		// The family sheet first, and its own second: the plugin's own rules
+		// are written to sit on top of the shared components, so the order is
+		// a dependency and not a hope. One handle across the family -- the
+		// file is byte-identical everywhere, so whichever plugin loads it
+		// first serves all of them.
+		wp_enqueue_style(
+			'dahu-ui',
+			plugins_url( 'assets/css/dahu-ui.css', DAHU_STORE_CREDIT_FILE ),
+			array(),
+			DAHU_STORE_CREDIT_VERSION
+		);
+
 		wp_enqueue_style(
 			'dahu-store-credit-admin',
 			plugins_url( 'assets/css/admin.css', DAHU_STORE_CREDIT_FILE ),
-			array(),
+			array( 'dahu-ui' ),
 			DAHU_STORE_CREDIT_VERSION
 		);
 	}
@@ -77,15 +89,16 @@ class Dahu_Store_Credit_Admin {
 		$extension_days = isset( $settings['extension_days'] ) ? (int) $settings['extension_days'] : 0;
 
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Store credit', 'dahu-store-credit' ); ?></h1>
+		<div class="wrap dahu-ui">
+			<div class="dahu-ui-head">
+				<h1 class="dahu-ui-head__title"><?php esc_html_e( 'Store credit', 'dahu-store-credit' ); ?></h1>
+				<p class="dahu-ui-head__sub"><?php esc_html_e( 'Credit a customer can spend at the checkout, and where it came from.', 'dahu-store-credit' ); ?></p>
+			</div>
 
-			<p class="dahu-store-credit__intro">
-				<?php esc_html_e( 'Dahu Store Credit turns a coupon into a balance a customer spends over several orders, instead of one that is consumed whole on the first.', 'dahu-store-credit' ); ?>
-			</p>
 			<hr class="wp-header-end">
 			<form method="post" action="options.php">
 				<?php settings_fields( 'dahu_store_credit_settings_group' ); ?>
+				<div class="dahu-ui-card">
 				<table class="form-table">
 					<tr>
 						<th scope="row"><?php esc_html_e( 'Enable Dahu Store Credit', 'dahu-store-credit' ); ?></th>
@@ -104,11 +117,16 @@ class Dahu_Store_Credit_Admin {
 						</td>
 					</tr>
 				</table>
-				<?php submit_button(); ?>
+				</div>
+				<?php submit_button( null, 'dahu-ui-btn dahu-ui-btn--go' ); ?>
 			</form>
 
-			<h2><?php esc_html_e( 'Active store credits', 'dahu-store-credit' ); ?></h2>
-			<?php $this->render_coupons_table(); ?>
+			<div class="dahu-ui-card" id="dahu-store-credit-list">
+				<div class="dahu-ui-card__head">
+					<h2 class="dahu-ui-card__title"><?php esc_html_e( 'Active store credits', 'dahu-store-credit' ); ?></h2>
+				</div>
+				<?php $this->render_coupons_table(); ?>
+			</div>
 		</div>
 		<?php
 	}
@@ -136,7 +154,7 @@ class Dahu_Store_Credit_Admin {
 		}
 
 		?>
-		<table class="widefat striped">
+		<table class="dahu-ui-table">
 			<thead>
 				<tr>
 					<th><?php esc_html_e( 'Code', 'dahu-store-credit' ); ?></th>
@@ -191,7 +209,7 @@ class Dahu_Store_Credit_Admin {
 		}
 
 		?>
-		<table class="widefat striped">
+		<table class="dahu-ui-table">
 			<thead>
 				<tr>
 					<th><?php esc_html_e( 'Date', 'dahu-store-credit' ); ?></th>

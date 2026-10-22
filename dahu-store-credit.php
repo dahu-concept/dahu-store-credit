@@ -104,3 +104,93 @@ add_filter(
 	10,
 	2
 );
+
+/*
+ * The welcome screen, shown once just after activation.
+ *
+ * Registered here rather than inside the admin include, because the
+ * activation flag has to be set whatever else is loaded.
+ */
+require_once DAHU_STORE_CREDIT_PATH . 'includes/dahu-welcome.php';
+
+/*
+ * The flag, not a redirect: an activation hook that redirects breaks bulk
+ * activation and WP-CLI, which activate several plugins in one request. The
+ * welcome screen reads the flag on the next page load, where a redirect is
+ * safe, and clears it when several plugins were activated together.
+ */
+register_activation_hook(
+	__FILE__,
+	static function () {
+		Dahu_Welcome::mark_activated( 'dahu-store-credit' );
+	}
+);
+
+add_action(
+	'init',
+	static function () {
+		Dahu_Welcome::register(
+			array(
+				'slug'       => 'dahu-store-credit',
+				'name'       => __( 'Store credit', 'dahu-store-credit' ),
+				'tagline'    => __( 'Credit a customer can spend at the checkout, and where it came from.', 'dahu-store-credit' ),
+				'file'       => DAHU_STORE_CREDIT_FILE,
+				'version'    => DAHU_STORE_CREDIT_VERSION,
+				'textdomain' => 'dahu-store-credit',
+				/*
+				 * Les mots de l'accueil viennent d'ici : le fichier partagé est
+				 * recopié dans toute la famille et ne peut donc porter aucun
+				 * domaine de traduction.
+				 */
+				'strings'    => array(
+					'next'   => __( 'Next', 'dahu-store-credit' ),
+					'done'   => __( 'Done', 'dahu-store-credit' ),
+					'skip'   => __( 'Skip', 'dahu-store-credit' ),
+					'of'     => __( 'of', 'dahu-store-credit' ),
+					'denied' => __( 'You are not allowed to view this page.', 'dahu-store-credit' ),
+				),
+				'points'     => array(
+				array(
+					'title' => __( 'A balance per customer', 'dahu-store-credit' ),
+					'text'  => __( 'Added by hand or by a refund.', 'dahu-store-credit' ),
+				),
+				array(
+					'title' => __( 'Spent at the checkout', 'dahu-store-credit' ),
+					'text'  => __( 'Applied like a payment, not a coupon.', 'dahu-store-credit' ),
+				),
+				array(
+					'title' => __( 'Always traceable', 'dahu-store-credit' ),
+					'text'  => __( 'Every movement says who made it and why.', 'dahu-store-credit' ),
+				),
+				),
+
+				/*
+				 * The one-time tour.
+				 *
+				 * Every selector below points at something the settings screen
+				 * always renders. A step whose target is missing is skipped
+				 * without a sound, so only the card is targeted, never the table
+				 * inside it (rendered only once a coupon is marked).
+				 */
+				'tour_screen' => 'woocommerce_page_dahu-store-credit',
+				'tour'        => array(
+					array(
+						'selector' => '#dahu-store-credit-list',
+						'title'    => __( 'Coupons become a balance', 'dahu-store-credit' ),
+						'text'     => __( 'What is left on a coupon stays available for the next order.', 'dahu-store-credit' ),
+					),
+					array(
+						'selector' => 'input[name="dahu_store_credit_settings[enabled]"]',
+						'title'    => __( 'Switch it on or off', 'dahu-store-credit' ),
+						'text'     => __( 'When on, the remaining balance is carried forward after payment.', 'dahu-store-credit' ),
+					),
+					array(
+						'selector' => 'input[name="dahu_store_credit_settings[extension_days]"]',
+						'title'    => __( 'Extend the validity', 'dahu-store-credit' ),
+						'text'     => __( 'Days added to the expiry date on each partial use.', 'dahu-store-credit' ),
+					),
+				),
+			)
+		);
+	}
+);

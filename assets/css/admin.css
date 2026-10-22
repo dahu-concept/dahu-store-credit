@@ -72,19 +72,5 @@
  *
  * This screen had no stylesheet at all, which is how a style ends up written
  * inline: there was nowhere else to put one. Having the file is most of the
- * point, even while it holds one rule.
+ * point, even while it holds no rule of its own beyond the shared tokens.
  */
-
-/* --- The one-line introduction under the page title ------------------- */
-
-/*
- * Every Dahu screen carries one, and it is the same rule everywhere. A lede
- * that runs the full width of a 1920px screen is not read; the reading measure
- * is what makes it a sentence rather than a banner.
- */
-.dahu-store-credit__intro {
-	max-width: var( --dahu-admin-measure );
-	margin: 0 0 var( --dahu-admin-gap-lg );
-	color: var( --dahu-admin-text-muted );
-	font-size: 14px;
-}
