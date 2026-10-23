@@ -149,7 +149,12 @@ class Dahu_Store_Credit_Admin {
 		);
 
 		if ( ! $query->have_posts() ) {
-			echo '<p>' . esc_html__( 'No store credit recorded yet.', 'dahu-store-credit' ) . '</p>';
+			printf(
+				'<p class="dahu-ui-hint">%s</p><p><a class="dahu-ui-btn" href="%s">%s</a></p>',
+				esc_html__( 'No store credit recorded yet. A fixed-cart coupon ticked as store credit appears here.', 'dahu-store-credit' ),
+				esc_url( admin_url( 'post-new.php?post_type=shop_coupon' ) ),
+				esc_html__( 'Create a coupon', 'dahu-store-credit' )
+			);
 			return;
 		}
 

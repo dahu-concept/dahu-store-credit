@@ -4,7 +4,7 @@ Tags: woocommerce, store credit, coupons, refunds, vouchers
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.4
+Stable tag: 1.1.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -95,10 +95,26 @@ before deleting if you really want them gone.
 
 == Changelog ==
 
+= 1.1.1 =
+* The screen a shop sees before it has any data now says what will appear there, and offers the link to the action that fills it.
+
+= 1.1.0 =
+* The activation screen now opens on the plugin's own mark rather than its initials, and the banner carries the same drawing as a watermark.
+
+= 1.0.5 =
+* Fixed: a balance of exactly one cent was destroyed instead of being carried
+  forward, and the order note said the credit had been spent in full.
+* Fixed: the optional uninstall wipe left the processed and restored markers
+  on orders behind on shops running high-performance order storage.
+
 = 1.0.4 =
 * First public release.
 
 == Upgrade Notice ==
+
+= 1.0.5 =
+Corrects a one-cent balance being lost when a store credit is almost fully
+spent.
 
 = 1.0.4 =
 First public release.

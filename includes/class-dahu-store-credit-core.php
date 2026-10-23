@@ -312,10 +312,19 @@ class Dahu_Store_Credit_Core {
 
 			$consumed = round( (float) $item->get_discount() + (float) $item->get_discount_tax(), $decimals );
 			$amount   = (float) $coupon->get_amount();
-			$solde    = max( 0, round( $amount - $consumed, $decimals ) );
+			$remaining = max( 0, round( $amount - $consumed, $decimals ) );
 
-			if ( $solde > 0.01 ) {
-				$coupon->set_amount( $solde );
+			/*
+			 * Strictly greater than zero, and the figure is already rounded to
+			 * the shop's precision. A threshold of one cent instead destroyed
+			 * the smallest balance there is: a credit with exactly 0.01 left
+			 * was declared fully used, the cent was dropped, and the coupon
+			 * kept its old amount while the order note said it was spent. A
+			 * residue too small to be money is already zero after the rounding
+			 * above, so no threshold is needed to get rid of it.
+			 */
+			if ( $remaining > 0 ) {
+				$coupon->set_amount( $remaining );
 				$coupon->set_usage_count( 0 );
 
 				$used_by = $coupon->get_used_by();
@@ -340,7 +349,7 @@ class Dahu_Store_Credit_Core {
 				$coupon->save();
 				$this->clear_reserved_cache( $coupon->get_id() );
 
-				$this->push_history( $coupon, $order_id, $consumed, $solde );
+				$this->push_history( $coupon, $order_id, $consumed, $remaining );
 
 				$order->add_order_note(
 					sprintf(
@@ -348,7 +357,7 @@ class Dahu_Store_Credit_Core {
 						__( 'Store credit %1$s: %2$s used, %3$s carried forward.', 'dahu-store-credit' ),
 						$code,
 						wc_price( $consumed ),
-						wc_price( $solde )
+						wc_price( $remaining )
 					)
 				);
 			} else {
@@ -372,7 +381,10 @@ class Dahu_Store_Credit_Core {
 	}
 
 	/**
-	 * Restitution en cas d'annulation / remboursement (total).
+	 * Give the consumed amount back when the order is cancelled or refunded.
+	 *
+	 * @param int $order_id The order that was cancelled or refunded.
+	 * @return void
 	 */
 	public function restore_order( $order_id ) {
 		$order = wc_get_order( $order_id );

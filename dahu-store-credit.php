@@ -3,7 +3,7 @@
  * Plugin Name:       Dahu Store Credit
  * Plugin URI:        https://dahu-concept.fr
  * Description:       Carries the unused balance of a WooCommerce fixed-cart coupon forward instead of consuming it whole, turning any coupon into real store credit.
- * Version:           1.0.4
+ * Version:           1.1.1
  * Author:            Hugo Vial-Jaime
  * Author URI:        mailto:contact@dahu-concept.fr
  * License:           MIT
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'DAHU_STORE_CREDIT_VERSION', '1.0.4' );
+define( 'DAHU_STORE_CREDIT_VERSION', '1.1.1' );
 define( 'DAHU_STORE_CREDIT_FILE', __FILE__ );
 define( 'DAHU_STORE_CREDIT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'DAHU_STORE_CREDIT_URL', plugin_dir_url( __FILE__ ) );
@@ -137,10 +137,20 @@ add_action(
 				'file'       => DAHU_STORE_CREDIT_FILE,
 				'version'    => DAHU_STORE_CREDIT_VERSION,
 				'textdomain' => 'dahu-store-credit',
+				'mark'       => array(
+					'view'  => '0 0 112 112',
+					'paths' => array(
+						'M15.0 20.0 H97.0 A9.0 9.0 0 0 1 106.0 29.0 V69.0 A9.0 9.0 0 0 1 97.0 78.0 H15.0 A9.0 9.0 0 0 1 6.0 69.0 V29.0 A9.0 9.0 0 0 1 15.0 20.0 Z',
+						'M6 40 L106 40',
+						'M84 94 Q46 102 28 76',
+						'M20 82 L28 72 L38 79',
+						'M24 58 L50 58',
+					),
+				),
 				/*
-				 * Les mots de l'accueil viennent d'ici : le fichier partagé est
-				 * recopié dans toute la famille et ne peut donc porter aucun
-				 * domaine de traduction.
+				 * The welcome screen's words come from here: the shared file is
+				 * copied byte for byte across the whole family, so it can carry
+				 * no text domain of its own.
 				 */
 				'strings'    => array(
 					'next'   => __( 'Next', 'dahu-store-credit' ),
