@@ -131,12 +131,34 @@ class Dahu_Store_Credit_Admin {
 		<?php
 	}
 
+	/**
+	 * Query argument carrying the page of the table.
+	 */
+	const PAGE_VAR = 'dahu_store_credit_page';
+
+	/**
+	 * How many store credits one page of the table holds.
+	 *
+	 * WHY THIS CONSTANT EXISTS. A shop that issues a credit on every refund
+	 * holds as many of these coupons as it has made refunds. The unpaginated
+	 * query this screen used to run read every one of them and built a
+	 * WC_Coupon for each: on a shop with ten thousand credits the screen
+	 * fetched ten thousand posts and their meta to show a table nobody
+	 * scrolls to the bottom of. Fifty is the page a WordPress list table
+	 * uses, so the screen behaves like the ones next to it.
+	 */
+	const PER_PAGE = 50;
+
 	private function render_coupons_table() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a page number on a read-only screen.
+		$paged = isset( $_GET[ self::PAGE_VAR ] ) ? max( 1, (int) $_GET[ self::PAGE_VAR ] ) : 1;
+
 		$query = new WP_Query(
 			array(
 				'post_type'      => 'shop_coupon',
 				'post_status'    => 'publish',
-				'posts_per_page' => -1,
+				'posts_per_page' => self::PER_PAGE,
+				'paged'          => $paged,
 				'meta_query'     => array(
 					array(
 						'key'   => '_dahu_store_credit',
@@ -185,7 +207,40 @@ class Dahu_Store_Credit_Admin {
 			</tbody>
 		</table>
 		<?php
+		$this->render_pagination( $paged, (int) $query->max_num_pages );
 		wp_reset_postdata();
+	}
+
+	/**
+	 * The page links below the table.
+	 *
+	 * Nothing is printed for a single page, so a shop with a handful of
+	 * credits sees the screen it saw before. The link text is WordPress's
+	 * own, which is why this adds no string of its own to translate.
+	 *
+	 * @param int $paged Page being shown.
+	 * @param int $pages Pages in all.
+	 * @return void
+	 */
+	private function render_pagination( $paged, $pages ) {
+
+		if ( $pages < 2 ) {
+			return;
+		}
+
+		$links = paginate_links(
+			array(
+				'base'    => add_query_arg( self::PAGE_VAR, '%#%' ),
+				'format'  => '',
+				'current' => $paged,
+				'total'   => $pages,
+				'type'    => 'plain',
+			)
+		);
+
+		if ( $links ) {
+			echo '<p class="dahu-ui-hint tablenav-pages">' . wp_kses_post( $links ) . '</p>';
+		}
 	}
 
 	public function add_history_metabox() {

@@ -54,14 +54,23 @@ function dahu_store_credit_uninstall_site() {
 
 	// Coupon metadata. Coupons are posts under HPOS exactly as they were
 	// before it, so post meta is the whole story for these two.
-	foreach ( array( '_dahu_store_credit', '_dahu_store_credit_history' ) as $meta_key ) {
+	foreach (
+		array(
+			'_dahu_store_credit',
+			'_dahu_store_credit_history',
+			/* The orders whose refund has already been credited to this
+			   credit. A COUPON meta, so it goes here and not with the order
+			   markers further down. */
+			'_dahu_store_credit_refunded_orders',
+		) as $meta_key
+	) {
 		delete_post_meta_by_key( $meta_key );
 	}
 
 	/*
 	 * Order markers, under BOTH storages.
 	 *
-	 * The two below are written with WC_Order::update_meta_data(), so where
+	 * The three below are written with WC_Order::update_meta_data(), so where
 	 * they land depends on whether the shop runs high-performance order
 	 * storage: in wp_postmeta on the legacy storage, in wc_orders_meta on
 	 * HPOS. delete_post_meta_by_key() reaches only the first, so on an HPOS
@@ -74,7 +83,11 @@ function dahu_store_credit_uninstall_site() {
 	 * answer for it are not loaded during an uninstall, and it is tested for
 	 * rather than assumed: a shop that never enabled HPOS does not have it.
 	 */
-	$order_markers = array( '_dahu_store_credit_processed', '_dahu_store_credit_restored' );
+	$order_markers = array(
+		'_dahu_store_credit_processed',
+		'_dahu_store_credit_restored',
+		'_dahu_store_credit_taken',
+	);
 
 	foreach ( $order_markers as $meta_key ) {
 		delete_post_meta_by_key( $meta_key );

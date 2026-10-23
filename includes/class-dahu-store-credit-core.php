@@ -8,6 +8,23 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Dahu_Store_Credit_Core {
 
+	/**
+	 * Order meta holding what each credit actually gave to this order, as an
+	 * array keyed by coupon code. A single fixed key, so uninstalling finds
+	 * it without a prefix search.
+	 */
+	const TAKEN_META = '_dahu_store_credit_taken';
+
+	/**
+	 * Coupon meta listing the orders whose refund has already been credited to
+	 * this credit. It lives on the COUPON, not on the order, so that it is
+	 * written by the very save() that moves the money: one object, one write,
+	 * nothing in between. An order-side marker could not do that -- see
+	 * restore_order().
+	 */
+	const REFUNDED_META = '_dahu_store_credit_refunded_orders';
+
+
 	private static $instance = null;
 
 	public static function instance() {
@@ -279,6 +296,31 @@ class Dahu_Store_Credit_Core {
 			$code        = $item->get_code();
 			$coupon_id   = wc_get_coupon_id_by_code( $code );
 
+			/*
+			 * ALREADY CHARGED? THE RECORD SAYS SO, CREDIT BY CREDIT.
+			 *
+			 * The order-wide marker used to be written inside this loop, so a
+			 * replay returned at the guard above before it had reached the
+			 * second credit. Measured on an order carrying two credits of
+			 * 100 EUR with lines of 40 and 30, interrupted after the first
+			 * credit was debited: the second was never debited at all, and the
+			 * refund then handed back its line on a credit nothing had been
+			 * taken from -- 130 EUR on a credit worth 100, 30 EUR created.
+			 *
+			 * Moving the marker out of the loop alone brought the opposite
+			 * defect back: the replay debited the first credit a second time.
+			 * So the loop asks the record, per code, rather than asking the
+			 * order. A record of '0' means a refund has given that credit
+			 * back, which leaves it chargeable again.
+			 */
+			$charged = $order->get_meta( self::TAKEN_META );
+			$charged = is_array( $charged ) ? $charged : array();
+			$already = wc_format_coupon_code( $code );
+			if ( array_key_exists( $already, $charged ) && '0' !== (string) $charged[ $already ] ) {
+				$this->log( "Order #{$order_id} already charged credit {$code}; skipping it." );
+				continue;
+			}
+
 			if ( ! $coupon_id ) {
 				$order->add_order_note(
 					sprintf(
@@ -323,34 +365,98 @@ class Dahu_Store_Credit_Core {
 			 * residue too small to be money is already zero after the rounding
 			 * above, so no threshold is needed to get rid of it.
 			 */
+			/*
+			 * ONE WRITE, WHATEVER IS LEFT.
+			 *
+			 * There used to be two branches here: "something is left", which
+			 * wrote the amount, and "fully used", which wrote the note and the
+			 * history and FORGOT the amount. Measured on the published
+			 * version: a 100 EUR credit settled by a 100 EUR order kept its
+			 * 100 EUR, and the customer spent it again as often as he cared
+			 * to; a refund on top took it to 200 EUR. The note said "fully
+			 * used" all the same.
+			 *
+			 * The defect was the duplication itself: two paths for one
+			 * operation, one of them incomplete. There is only one now.
+			 * `$remaining` is zero in the "fully used" case, which is exactly
+			 * what has to be written; only the note differs.
+			 */
+			$coupon->set_amount( $remaining );
+			$coupon->set_usage_count( 0 );
+
+			/*
+			 * WHAT WAS ACTUALLY TAKEN, recorded so a refund can undo it.
+			 *
+			 * A charge clips -- it cannot take more than the credit holds --
+			 * whereas a refund used to add back the COUPON LINE, which has no
+			 * such limit. Measured: a 100 EUR credit on an order consuming
+			 * 120 EUR, refunded, came back as 220 EUR.
+			 *
+			 * The coupon line is therefore not enough to undo a charge: what
+			 * was taken is recorded per credit, and that is what is returned.
+			 *
+			 * Recorded UNDER THE CODE, not under the id. A shop that deletes a
+			 * credit and recreates it under the same code gives it a fresh id;
+			 * a record filed by id then became unreachable and the refund fell
+			 * back on the coupon line -- measured: 120 EUR handed back on a
+			 * credit that had only ever held 100. The code, by contrast, is
+			 * what the order line itself carries.
+			 *
+			 * One meta holding an array keyed by code, because a prefixed key
+			 * can only be erased with a LIKE: uninstalling would find it badly
+			 * and an orphan meta would outlive the plugin.
+			 */
+			$taken          = round( $amount - $remaining, $decimals );
+			$taken_map      = $order->get_meta( self::TAKEN_META );
+			$taken_map      = is_array( $taken_map ) ? $taken_map : array();
+			$taken_map[ wc_format_coupon_code( $code ) ] = (string) $taken;
+			$order->update_meta_data( self::TAKEN_META, $taken_map );
+
+			$used_by  = $coupon->get_used_by();
+			$user_ref = $order->get_customer_id() ? (string) $order->get_customer_id() : $order->get_billing_email();
+			if ( ! empty( $used_by ) ) {
+				$used_by = array_values(
+					array_filter(
+						$used_by,
+						function ( $u ) use ( $user_ref ) {
+							return (string) $u !== (string) $user_ref;
+						}
+					)
+				);
+				$coupon->update_meta_data( 'used_by', $used_by );
+			}
+
+			$extension_days = $this->extension_days();
+			if ( $extension_days > 0 && $remaining > 0 ) {
+				$coupon->set_date_expires( time() + ( $extension_days * DAY_IN_SECONDS ) );
+			}
+
+			/*
+			 * THE RECORD BEFORE THE DEBIT.
+			 *
+			 * The coupon used to be debited first and the order saved after.
+			 * Any interruption between the two -- another plugin on the note,
+			 * a request cut short -- left a debited credit with no record of
+			 * what had been taken and without the marker that stops a second
+			 * pass. Measured: a 100 EUR credit and a 40 EUR line run twice
+			 * fell to 20 EUR, 40 EUR lost by the customer, and the note locked
+			 * the loss in by announcing one charge only.
+			 *
+			 * Money therefore no longer moves before what undoes it is
+			 * durable.
+			 *
+			 * Only the record is written here, not the order-wide marker: that
+			 * one is written after the loop, so an interruption does not hide
+			 * the credits this pass has not reached yet.
+			 */
+			$order->save();
+
+			$coupon->save();
+			$this->clear_reserved_cache( $coupon->get_id() );
+
+			$this->push_history( $coupon, $order_id, $consumed, $remaining );
+
 			if ( $remaining > 0 ) {
-				$coupon->set_amount( $remaining );
-				$coupon->set_usage_count( 0 );
-
-				$used_by = $coupon->get_used_by();
-				$user_ref = $order->get_customer_id() ? (string) $order->get_customer_id() : $order->get_billing_email();
-				if ( ! empty( $used_by ) ) {
-					$used_by = array_values(
-						array_filter(
-							$used_by,
-							function ( $u ) use ( $user_ref ) {
-								return (string) $u !== (string) $user_ref;
-							}
-						)
-					);
-					$coupon->update_meta_data( 'used_by', $used_by );
-				}
-
-				$extension_days = $this->extension_days();
-				if ( $extension_days > 0 ) {
-					$coupon->set_date_expires( time() + ( $extension_days * DAY_IN_SECONDS ) );
-				}
-
-				$coupon->save();
-				$this->clear_reserved_cache( $coupon->get_id() );
-
-				$this->push_history( $coupon, $order_id, $consumed, $remaining );
-
 				$order->add_order_note(
 					sprintf(
 						/* translators: 1: coupon code, 2: consumed amount, 3: remaining balance */
@@ -368,7 +474,6 @@ class Dahu_Store_Credit_Core {
 						$code
 					)
 				);
-				$this->push_history( $coupon, $order_id, $consumed, 0 );
 			}
 
 			$processed = true;
@@ -392,7 +497,27 @@ class Dahu_Store_Credit_Core {
 			return;
 		}
 
-		if ( 'yes' !== $order->get_meta( '_dahu_store_credit_processed' ) ) {
+		/*
+		 * THE RECORDS ARE THE DOOR, NOT THE MARKER.
+		 *
+		 * The order-wide marker is written after the charge loop, so it is the
+		 * last thing to reach the database -- while the per-credit records are
+		 * written as each credit is charged. Gating a refund on the marker
+		 * therefore guarded durable data with a weaker signal: measured on an
+		 * order carrying two credits, a request that died on the marker left
+		 * both credits charged, both records in the database, and the refund
+		 * refusing to run at all -- 70 EUR taken from the customer and never
+		 * returned, with no note and no history to find it by. Three credits
+		 * made it 90.
+		 *
+		 * So a refund runs when there is something to give back: either the
+		 * marker, or a record of what was taken. The marker stays as the
+		 * order-wide summary it already is on the refund side.
+		 */
+		$charged_any = $order->get_meta( self::TAKEN_META );
+		$charged_any = is_array( $charged_any ) ? $charged_any : array();
+
+		if ( 'yes' !== $order->get_meta( '_dahu_store_credit_processed' ) && ! $charged_any ) {
 			return;
 		}
 
@@ -431,7 +556,81 @@ class Dahu_Store_Credit_Core {
 				continue;
 			}
 
-			$new_amount = round( (float) $coupon->get_amount() + $consumed, $decimals );
+			/*
+			 * This order's refund already credited to this credit? Then there
+			 * is nothing to do, and the token that says so sits on the coupon
+			 * itself -- see the write below for why it cannot be on the order.
+			 */
+			$done = $coupon->get_meta( self::REFUNDED_META );
+			if ( is_array( $done ) && in_array( (int) $order_id, array_map( 'intval', $done ), true ) ) {
+				continue;
+			}
+
+			/*
+			 * WE RETURN WHAT WAS TAKEN, NOT WHAT THE LINE SHOWS.
+			 *
+			 * A charge clips: it cannot take more than the credit held. A
+			 * refund, by contrast, added back the coupon line with no such
+			 * limit -- measured: a 100 EUR credit on an order consuming
+			 * 120 EUR, refunded, came back as 220 EUR.
+			 *
+			 * The charge now records, per credit, what it really took. Where
+			 * that record exists, it is what counts.
+			 *
+			 * Where it is missing -- an order charged by an earlier version --
+			 * the old calculation stands, and it is worth saying which way it
+			 * errs: measured across the whole range, this fallback NEVER
+			 * returns less than was taken, and can return up to the credit's
+			 * own value too much when the order consumed more than it held.
+			 * Orders charged before this update therefore stay exposed to the
+			 * old defect; new ones do not. Bounding it would mean guessing
+			 * what the credit held back then, which nothing records.
+			 */
+			/*
+			 * `is_numeric`, AND NOT "IS THE RECORD THERE".
+			 *
+			 * The record is a meta: an import that re-encodes orders, a failed
+			 * serialization, a third-party tool, and it comes back as an
+			 * unreadable string or an array. Testing only for its presence let
+			 * `(float)` speak in its place -- measured: an unreadable record
+			 * gave 0, the guard below cut the loop, and 40 EUR taken were not
+			 * returned, with no note, no marker and no history line; a nested
+			 * array gave 1 EUR for 40 EUR taken.
+			 *
+			 * A record we cannot read is therefore treated as a record that is
+			 * missing: the fallback above applies. It may overpay, but it says
+			 * so in the order note, whereas a silent refund is invisible to
+			 * the customer and to the shop alike.
+			 *
+			 * `is_finite` sits beside it because `is_numeric` accepts '1e400',
+			 * which `(float)` turns into INF: that passed the guard below and
+			 * gave the coupon an infinite value, able to pay any order, while
+			 * the note read "inf returned to the coupon". A charge cannot
+			 * write such a value -- only an import or a hand edit can, which is
+			 * exactly the family this test is here for.
+			 */
+			$taken_map = $order->get_meta( self::TAKEN_META );
+			$taken_map = is_array( $taken_map ) ? $taken_map : array();
+			$key       = wc_format_coupon_code( $code );
+			$recorded  = array_key_exists( $key, $taken_map ) ? $taken_map[ $key ] : '';
+			$give_back = is_numeric( $recorded ) && is_finite( (float) $recorded )
+				? round( (float) $recorded, $decimals )
+				: $consumed;
+
+			/*
+			 * NOTHING TO RETURN, NOTHING TO SAY.
+			 *
+			 * A credit already empty when the order was charged gave nothing,
+			 * yet the coupon line still carries its amount. The guard further
+			 * up looks at that line rather than at the charge itself, and so
+			 * allowed a note saying "50.00 returned", a history entry of
+			 * -50 EUR and the refund marker, for nothing returned at all.
+			 */
+			if ( $give_back <= 0 ) {
+				continue;
+			}
+
+			$new_amount = round( (float) $coupon->get_amount() + $give_back, $decimals );
 			$coupon->set_amount( $new_amount );
 			$coupon->set_usage_count( 0 );
 
@@ -449,17 +648,79 @@ class Dahu_Store_Credit_Core {
 				$coupon->update_meta_data( 'used_by', $used_by );
 			}
 
+			/*
+			 * THE RECORD IS SPENT BEFORE THE CREDIT, AS ON THE CHARGE SIDE.
+			 *
+			 * A charge saves the order before debiting the credit; a refund
+			 * used to credit the coupon before saving its own order, and that
+			 * is the direction which repeats without limit. Measured: a
+			 * 100 EUR credit, a 40 EUR line, a refund interrupted after the
+			 * credit -- the marker never reaches the database, the next pass
+			 * finds the record still at 40, and the coupon climbs to 140 EUR.
+			 * Every replay added another 40.
+			 *
+			 * Setting the record back to zero is what closes the window, not
+			 * the write order on its own: order alone would move the loss onto
+			 * the customer instead of removing it. A record of zero stops the
+			 * guard further up, so a refund is worth exactly once.
+			 *
+			 * The refund marker is deliberately NOT written here but after the
+			 * loop. Written per credit, it made a replay return before the
+			 * second credit had been handled at all: measured on an order
+			 * carrying two credits, an interruption after the first one left
+			 * the second's 30 EUR unreturned for good, with no note and no
+			 * history. The record per code already gives idempotence credit by
+			 * credit, so the marker is only the order-wide summary.
+			 */
+			/*
+			 * THE TOKEN TRAVELS WITH THE MONEY.
+			 *
+			 * The coupon and the order are two separate stores, so one of them
+			 * is written first whichever way round it is done, and each order
+			 * loses for somebody. Crediting the coupon first and saving the
+			 * order after let an interruption replay the refund without limit:
+			 * measured, a 40 EUR refund replayed took the credit to 140 EUR,
+			 * then 180. Saving the order first instead bounded the loss but
+			 * moved it onto the customer and made it silent: the record read
+			 * '0', the replay returned nothing, and 40 EUR taken were never
+			 * given back, with no note anywhere to find it by.
+			 *
+			 * Neither order of writes can fix that, because the token saying
+			 * "this refund has happened" lived in a different store from the
+			 * money. It now lives on the coupon and is written by the same
+			 * save() that credits it, so the two cannot come apart: a replay
+			 * sees the order listed and returns nothing, whether or not the
+			 * order itself was ever saved.
+			 */
+			$refunded   = $coupon->get_meta( self::REFUNDED_META );
+			$refunded   = is_array( $refunded ) ? $refunded : array();
+			$refunded[] = (int) $order_id;
+			$coupon->update_meta_data( self::REFUNDED_META, array_values( array_unique( $refunded ) ) );
+
 			$coupon->save();
+
+			$taken_map[ $key ] = '0';
+			$order->update_meta_data( self::TAKEN_META, $taken_map );
+			$order->save();
 			$this->clear_reserved_cache( $coupon->get_id() );
 
-			$this->push_history( $coupon, $order_id, -$consumed, $new_amount );
+			/*
+			 * THE AUDIT TRAIL SAYS WHAT WAS RETURNED, NOT WHAT THE LINE SHOWS.
+			 *
+			 * The amount returned was clipped but the history and the note
+			 * went on printing the coupon line: on a 100 EUR credit consumed
+			 * by 120, the order announced "120.00 returned" for 100 EUR
+			 * actually returned. For a credits module, an audit trail wrong by
+			 * twenty euros is worth as much as the money defect itself.
+			 */
+			$this->push_history( $coupon, $order_id, -$give_back, $new_amount );
 
 			$order->add_order_note(
 				sprintf(
 					/* translators: 1: coupon code, 2: restored amount */
 					__( 'Store credit %1$s: order cancelled or refunded, %2$s returned to the coupon.', 'dahu-store-credit' ),
 					$code,
-					wc_price( $consumed )
+					wc_price( $give_back )
 				)
 			);
 

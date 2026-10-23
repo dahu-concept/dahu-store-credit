@@ -4,7 +4,7 @@ Tags: woocommerce, store credit, coupons, refunds, vouchers
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -94,6 +94,20 @@ before deleting if you really want them gone.
 3. The list of active store credits.
 
 == Changelog ==
+
+= 1.1.2 =
+* Fixed: a credit spent down to exactly zero kept its full value, so it could be spent a second time; refunding such an order doubled it. What is left is now written whatever that amount is.
+* Fixed: refunding an order gave back the amount the credit line still showed rather than what the order had actually taken, which created money whenever the order consumed more than the credit held.
+* Fixed: what a charge took is now recorded under the credit's code rather than its internal id. A shop that deleted a credit and recreated it under the same code lost that record, and the refund fell back on the order line, handing back more than the credit had ever held.
+* Fixed: the order note and the credit's history printed the order line rather than the amount actually returned, so the audit trail could be wrong by the clipped difference. A credit already empty when charged now stays silent instead of announcing a return of nothing.
+* Fixed: the credit was debited before the order recording the charge was saved. An interruption between the two left a debited credit with no record of what had been taken, and a second pass could debit it again.
+* Fixed: the same applied in reverse to a refund, which credited the coupon before saving the order that marks the refund as done. An interruption between the two let the refund run again, adding the same amount every time. The record is now spent before the credit is given back, so a refund is worth exactly once.
+* Fixed: a record this plugin cannot read — a meta re-encoded by an import, a failed serialization — was treated as a record of zero, and the refund silently returned nothing at all. It now falls back to the order line, which may return more but says so in the order note.
+* Fixed: on an order carrying more than one credit, an interruption part-way through left the remaining credits untouched for good — never charged, or never given back — because the order-wide marker was written from the first credit onwards. Each credit is now tracked on its own.
+* Fixed: the token saying a refund has happened now lives on the credit itself, written by the same save that moves the money, so an interruption can no longer either lose a refund or repeat it.
+* Fixed: a record holding a value too large to be a number gave the credit an infinite value, able to pay any order.
+* Fixed: a refund used to require the order-wide marker, which is the last thing written when an order is charged. An interruption just before it left every credit charged and the refund refusing to run — taken from the customer and never returned, with nothing on the order to find it by. A refund now runs whenever there is a record of what was taken.
+* The list of active store credits is now shown fifty at a time. A shop that issues a credit on every refund held thousands of them, and the screen read and loaded every single one before drawing the table.
 
 = 1.1.1 =
 * The screen a shop sees before it has any data now says what will appear there, and offers the link to the action that fills it.
