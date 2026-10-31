@@ -1,5 +1,5 @@
 === Dahu Store Credit ===
-Contributors: hugovialjaime
+Contributors: dahuconcept
 Tags: woocommerce, store credit, coupons, refunds, vouchers
 Requires at least: 6.0
 Tested up to: 7.1
@@ -133,6 +133,8 @@ before deleting if you really want them gone.
 * Changed: where an order is marked refunded and what was actually refunded covers no goods — because its items were paid entirely by the credit — the amount still goes back, since a shop that marks an order refunded has said something. But the order now says so, so the shop can check that the goods really came back.
 * Fixed: the record of what had already been returned is bounded like every other amount here. A damaged record holding a negative value could carry a credit far above what it ever lent, and one holding an infinite value made a refund return nothing at all, in silence. It is now read within bounds, and an unreadable one is announced.
 * Changed: deleting a refund in WooCommerce lowers the refunded total, and the credit is not taken back off the customer — it may already have been spent. The balance stands.
+* Changed: where an order is marked refunded and nothing that was actually refunded covers any goods — only shipping, fees, or an amount with no line attached — the order now says so. The amount still goes back, because a shop that marks an order refunded has said something; but 40.00 could return with not a cent of goods having come back, and nothing pointed it out.
+* Changed: a partial refund that cannot be tied to its order now says so on the order instead of passing over in silence. Nothing is paid out in that case — it could hand over an amount another order took — and an amount owed that goes unpaid without a word is what this plugin refuses everywhere else.
 * Changed: uninstalling now also removes the records this version adds. The bench that checks the wipe reads the plugin's own meta constants, so a key added later cannot be forgotten.
 
 = 1.1.2 =

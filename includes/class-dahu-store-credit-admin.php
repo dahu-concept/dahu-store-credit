@@ -159,6 +159,7 @@ class Dahu_Store_Credit_Admin {
 				'post_status'    => 'publish',
 				'posts_per_page' => self::PER_PAGE,
 				'paged'          => $paged,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- the only way to list credits; admin screen, bounded by PER_PAGE and paged.
 				'meta_query'     => array(
 					array(
 						'key'   => '_dahu_store_credit',

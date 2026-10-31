@@ -6,7 +6,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"PO-Revision-Date: 2026-10-31 10:29+0000\n"
+"PO-Revision-Date: 2026-10-31 11:09+0000\n"
 "X-Generator: dahu i18n-build\n"
 
 #: dahu-store-credit.php:164
@@ -279,6 +279,6 @@ msgid "Store credit %s: the record of what had already been returned on this ord
 msgstr "Avoir %s : l’enregistrement de ce qui avait déjà été rendu sur cette commande est illisible ; il a donc été traité comme « rien rendu pour l’instant ». Vérifiez le solde de cet avoir et son historique."
 
 #: includes/class-dahu-store-credit-core.php:1703
-msgid "Store credit %s: this order was marked refunded, and what was actually refunded covers no goods — its items were paid entirely by the credit. The full amount has been returned. Check that the goods really came back."
-msgstr "Avoir %s : cette commande a été marquée remboursée, et ce qui a réellement été remboursé ne couvre aucune marchandise — ses articles étaient payés entièrement par l’avoir. Le montant complet a été rendu. Vérifiez que la marchandise est bien revenue."
+msgid "Store credit %s: this order was marked refunded, but nothing that was actually refunded covers any goods — only shipping, fees or an amount with no line attached. The full amount has been returned to the credit anyway. Check that the goods really came back."
+msgstr "Avoir %s : cette commande a été marquée remboursée, mais rien de ce qui a réellement été remboursé ne couvre de marchandise — seulement le port, des frais, ou un montant sans ligne rattachée. Le montant complet a tout de même été rendu à l’avoir. Vérifiez que la marchandise est bien revenue."
 

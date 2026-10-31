@@ -348,6 +348,7 @@ class Dahu_Store_Credit_Core {
 		 * particular credit has been used, which is a handful of orders at
 		 * most. `order_item_name` holds the coupon code on a coupon line.
 		 */
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- no API lists the orders carrying a coupon; the computed result is cached in a 30-second transient (read above, written at the end of this method), and the table name comes from $wpdb->prefix.
 		$order_ids = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT DISTINCT order_id
@@ -389,26 +390,45 @@ class Dahu_Store_Credit_Core {
 			$verdict = $this->register_verdict( $coupon, $order, $order_id, $code );
 
 			/*
-			 * `unmatched` COUNTS AS CHARGED HERE TOO, and leaving it out took
-			 * the money off the balance twice.
+			 * ONLY `speaks` LEAVES THE LOOP, AND THAT IS AN ARBITRATION.
 			 *
-			 * On that verdict the charge side believes the register and
-			 * refuses to debit the line again -- so the amount is already
-			 * gone from the balance -- while this reader went on counting the
-			 * same line as reserved. Measured by an adverse review: a credit
-			 * really holding 60,00 EUR offered 20,00 EUR, and with one more
-			 * pending order the available balance went negative and the
-			 * credit was refused at the basket altogether, on a 100,00 EUR
-			 * credit the customer still held 60,00 EUR of.
+			 * DO NOT "RESTORE" `|| 'unmatched' === $verdict` HERE. An earlier
+			 * version of this comment described exactly that, with figures,
+			 * and the code had meanwhile stopped doing it -- so the comment
+			 * read as a fix that had been lost, and the one line it invited
+			 * would reverse a weighed decision in the irrecoverable
+			 * direction. An adverse review reproduced the figures from the
+			 * stale text and had to go and check the bench to find out which
+			 * of the two was right. Prose that contradicts the code is the
+			 * most expensive kind of defect in this file.
 			 *
-			 * `other-order` stays counted, and the distinction is the whole
-			 * point: there the line belongs to a genuinely new order that
-			 * nothing has charged, so it really is reserved.
+			 * What is true: on `speaks` the charge is recorded for THIS
+			 * order, so the amount has already left the balance and counting
+			 * the line again would take it off twice.
 			 *
-			 * Note what this removes rather than adds: one less question put
-			 * to a meta on the order. The flag below is the last of them here
-			 * and is kept only for credits charged by a version with no
-			 * register.
+			 * On `unmatched` the record cannot be tied to this order. The
+			 * charge side believes it and will not debit, so nothing more
+			 * will be taken -- and the line is nevertheless counted as
+			 * reserved, ON PURPOSE. The two harms were measured and weighed:
+			 *
+			 *   not counting it -- 60,00 EUR of goods leave against a credit
+			 *   the charge refuses to debit. Shop's loss, irrecoverable.
+			 *
+			 *   counting it -- a credit really holding 60,00 EUR offers
+			 *   20,00 EUR, and with another pending order it is refused at
+			 *   the basket. Customer's loss, which an administrator can
+			 *   release.
+			 *
+			 * The recoverable harm was chosen, and the order carries a note
+			 * saying why. The decision is pinned by a named assertion in
+			 * `_harness/prove-store-credit-register.php`, section 9 bis, on
+			 * an uncorroborated line being reserved rather than given away:
+			 * changing this line turns that assertion red, which is the
+			 * intended way to find out.
+			 *
+			 * `other-order` is counted too, and for a plainer reason: there
+			 * the line belongs to a genuinely new order that nothing has
+			 * charged, so it really is reserved.
 			 */
 			if ( 'speaks' === $verdict ) {
 				continue;
@@ -623,6 +643,17 @@ class Dahu_Store_Credit_Core {
 			 * order — an order charged by an earlier version — and it then
 			 * behaves exactly as it did then.
 			 */
+			/*
+			 * THE KEY SAYS WHICH REFUSAL, NOT JUST "A REFUSAL".
+			 *
+			 * The four notes below are mutually exclusive on one pass, so a
+			 * single key looked harmless. Across two passes it is not: the
+			 * first pass writes "already recorded as charged", the credit is
+			 * then deleted and recreated under the same code, and the note
+			 * that matters -- "it is not the one that paid for this order" --
+			 * is swallowed because something was already said under that key.
+			 * Each refusal therefore carries its own key.
+			 */
 			$already = wc_format_coupon_code( $code );
 
 			list( $seen, $replaced, $unmatched ) = $this->charge_record( $coupon, $coupon_id, $order, $order_id, $code );
@@ -631,7 +662,7 @@ class Dahu_Store_Credit_Core {
 
 				if ( ! is_numeric( $seen ) || ! is_finite( (float) $seen ) ) {
 					$this->log( "Order #{$order_id} carries an unreadable charge record for credit {$code}; skipping it." );
-					$this->say_once( $order, 'skipped-' . $already, sprintf(
+					$this->say_once( $order, 'skipped-unreadable-' . $already, sprintf(
 						/* translators: %s: coupon code */
 						__( 'Store credit %s: this order carries a charge record that cannot be read, so the credit was left alone. Check the credit before treating this order as paid by it.', 'dahu-store-credit' ),
 						$code
@@ -655,7 +686,7 @@ class Dahu_Store_Credit_Core {
 					 * by the credit that has since been destroyed.
 					 */
 					if ( $replaced ) {
-						$this->say_once( $order, 'skipped-' . $already, sprintf(
+						$this->say_once( $order, 'skipped-replaced-' . $already, sprintf(
 							/* translators: %s: coupon code */
 							__( 'Store credit %s: this order was charged on a credit that has since been deleted and recreated under the same code, so the credit now carrying that code was left alone. It is not the one that paid for this order.', 'dahu-store-credit' ),
 							$code
@@ -664,7 +695,7 @@ class Dahu_Store_Credit_Core {
 					}
 
 					if ( $unmatched ) {
-						$this->say_once( $order, 'skipped-' . $already, sprintf(
+						$this->say_once( $order, 'skipped-unmatched-' . $already, sprintf(
 							/* translators: %s: coupon code */
 							__( 'Store credit %s: a charge is recorded against this order id, but it could not be matched to this order, so the credit was left alone. Check whether this order was really paid by that credit.', 'dahu-store-credit' ),
 							$code
@@ -1164,8 +1195,20 @@ class Dahu_Store_Credit_Core {
 			$rendus += (float) $order->get_total_refunded_for_item( $item_id );
 		}
 
+		/*
+		 * The predicate is "a refund exists and NO GOODS came back", and it
+		 * used to carry a third clause -- that the item lines netted to zero
+		 * -- which restricted the warning to orders paid entirely by credit.
+		 * An adverse review measured what that left out: goods of 100,00 EUR
+		 * with a 40,00 EUR credit, the shipping alone refunded and the order
+		 * then marked refunded for the books. 40,00 EUR went back, not a cent
+		 * of goods had been returned, the customer kept all of it, and the
+		 * order carried only the ordinary "40.00 returned" note.
+		 *
+		 * Whether the credit paid for all of the goods or some of them
+		 * changes nothing about the exposure, so it is no longer asked.
+		 */
 		$port_seul = ( $order->has_status( 'refunded' )
-			&& round( $biens, $decimals ) <= 0
 			&& round( (float) $order->get_total_refunded(), $decimals ) > 0
 			&& round( $rendus, $decimals ) <= 0 );
 		$restored = false;
@@ -1700,7 +1743,7 @@ class Dahu_Store_Credit_Core {
 			if ( $port_seul ) {
 				$this->say_once( $order, 'port-seul-' . $key, sprintf(
 					/* translators: %s: coupon code */
-					__( 'Store credit %s: this order was marked refunded, and what was actually refunded covers no goods — its items were paid entirely by the credit. The full amount has been returned. Check that the goods really came back.', 'dahu-store-credit' ),
+					__( 'Store credit %s: this order was marked refunded, but nothing that was actually refunded covers any goods — only shipping, fees or an amount with no line attached. The full amount has been returned to the credit anyway. Check that the goods really came back.', 'dahu-store-credit' ),
 					$code
 				) );
 			}
@@ -2160,7 +2203,26 @@ class Dahu_Store_Credit_Core {
 			 * either, because paying it would hand over an amount another
 			 * order took.
 			 */
-			if ( $unmatched || null === $recorded ) {
+			/*
+			 * A charge that cannot be tied to this order is not paid out
+			 * here, because paying it would hand over an amount another order
+			 * took -- the same refusal as a full refund. AND IT IS SAID, for
+			 * the same reason it is said there: an adverse review measured
+			 * 20,00 EUR owed and not returned with no note at all, and the
+			 * whole charge disappearing in silence over the instalments that
+			 * followed. `null` is different and stays silent: nothing claims a
+			 * charge, so there is nothing to report.
+			 */
+			if ( $unmatched ) {
+				$this->say_once( $order, 'unmatched-' . $key, sprintf(
+					/* translators: %s: coupon code */
+					__( 'Store credit %s: a charge is recorded against this order id but cannot be tied to this order, so nothing was returned automatically — returning it could hand over an amount another order took. Check whether this order was paid by that credit and refund it by hand if so.', 'dahu-store-credit' ),
+					$code
+				) );
+				continue;
+			}
+
+			if ( null === $recorded ) {
 				continue;
 			}
 
@@ -2263,7 +2325,7 @@ class Dahu_Store_Credit_Core {
 					__( 'Dahu Store Credit: %1$s returned to %2$s, the credit\'s share of a partial refund covering %3$s of this order.', 'dahu-store-credit' ),
 					wc_price( $delta ),
 					$code,
-					round( $part * 100 ) . '%'
+					$this->part_lisible( $part )
 				)
 			);
 
@@ -2275,6 +2337,29 @@ class Dahu_Store_Credit_Core {
 				) );
 			}
 		}
+	}
+
+	/**
+	 * The share, written so it never reads as nothing.
+	 *
+	 * `round( $part * 100 )` printed "covering 0% of this order" for any
+	 * share under half a percent -- measured on lines of 6 000,00 EUR with
+	 * 1,00 EUR refunded, where 0,01 EUR really did go back. A note that says
+	 * zero about an amount that moved is the kind of untruth this file spends
+	 * its comments refusing.
+	 *
+	 * @param float $part The share, between 0 and 1.
+	 * @return string
+	 */
+	private function part_lisible( $part ) {
+
+		$pourcent = (float) $part * 100;
+
+		if ( $pourcent > 0 && $pourcent < 1 ) {
+			return rtrim( rtrim( number_format( $pourcent, 2, '.', '' ), '0' ), '.' ) . '%';
+		}
+
+		return round( $pourcent ) . '%';
 	}
 
 	/**

@@ -113,22 +113,22 @@ function dahu_store_credit_uninstall_site() {
 
 	if ( $has_orders_meta === $orders_meta ) {
 		foreach ( $order_markers as $meta_key ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- own-prefix table name, value prepared.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- the only interpolated part is $wpdb->prefix . 'wc_orders_meta', built above from the installation's own prefix; the meta key goes through prepare().
 			$wpdb->query( $wpdb->prepare( "DELETE FROM {$orders_meta} WHERE meta_key = %s", $meta_key ) );
 		}
 	}
 }
 
 if ( is_multisite() ) {
-	$site_ids = get_sites(
+	$dahu_store_credit_site_ids = get_sites(
 		array(
 			'fields' => 'ids',
 			'number' => 0,
 		)
 	);
 
-	foreach ( $site_ids as $site_id ) {
-		switch_to_blog( $site_id );
+	foreach ( $dahu_store_credit_site_ids as $dahu_store_credit_site_id ) {
+		switch_to_blog( $dahu_store_credit_site_id );
 		dahu_store_credit_uninstall_site();
 		restore_current_blog();
 	}

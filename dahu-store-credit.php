@@ -5,7 +5,7 @@
  * Description:       Carries the unused balance of a WooCommerce fixed-cart coupon forward instead of consuming it whole, turning any coupon into real store credit.
  * Version:           1.2.0
  * Author:            Hugo Vial-Jaime
- * Author URI:        mailto:contact@dahu-concept.fr
+ * Author URI:        https://dahu-concept.fr
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
  * Text Domain:       dahu-store-credit
@@ -14,7 +14,7 @@
  * Requires Plugins: woocommerce
  * Requires PHP:      7.4
  * WC requires at least: 7.0
- * WC tested up to:   11.1
+ * WC tested up to:   11.2
  *
  * @package DahuStoreCredit
  */

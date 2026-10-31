@@ -280,5 +280,5 @@ msgid "Store credit %s: the record of what had already been returned on this ord
 msgstr ""
 
 #: includes/class-dahu-store-credit-core.php:1703
-msgid "Store credit %s: this order was marked refunded, and what was actually refunded covers no goods — its items were paid entirely by the credit. The full amount has been returned. Check that the goods really came back."
+msgid "Store credit %s: this order was marked refunded, but nothing that was actually refunded covers any goods — only shipping, fees or an amount with no line attached. The full amount has been returned to the credit anyway. Check that the goods really came back."
 msgstr ""
