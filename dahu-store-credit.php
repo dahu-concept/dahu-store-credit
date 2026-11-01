@@ -1,7 +1,6 @@
 <?php
 /**
  * Plugin Name:       Dahu Store Credit
- * Plugin URI:        https://dahu-concept.fr
  * Description:       Carries the unused balance of a WooCommerce fixed-cart coupon forward instead of consuming it whole, turning any coupon into real store credit.
  * Version:           1.2.0
  * Author:            Hugo Vial-Jaime
