@@ -1,5 +1,5 @@
 === Ubac Store Credit ===
-Contributors: ubacconcept
+Contributors: dahuconcept
 Tags: woocommerce, store credit, coupons, refunds, vouchers
 Requires at least: 6.0
 Tested up to: 7.1
