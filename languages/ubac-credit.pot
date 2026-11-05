@@ -2,7 +2,7 @@
 # This file is distributed under the MIT licence.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dahu Store Credit\n"
+"Project-Id-Version: Ubac Store Credit\n"
 "Report-Msgid-Bugs-To: https://dahu-concept.fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -63,25 +63,25 @@ msgid "Current balance"
 msgstr ""
 
 #: includes/class-ubac-credit-admin.php:31 includes/class-ubac-credit-admin.php:32
-msgid "Dahu Store Credit"
+msgid "Ubac Store Credit"
 msgstr ""
 
 #: includes/class-ubac-credit-admin.php:249
-msgid "Dahu Store Credit history"
+msgid "Ubac Store Credit history"
 msgstr ""
 
 #: ubac-credit.php:53
-msgid "Dahu Store Credit requires WooCommerce."
+msgid "Ubac Store Credit requires WooCommerce."
 msgstr ""
 
 #. translators: %s: coupon code */
 #: includes/class-ubac-credit-core.php:641
-msgid "Dahu Store Credit: could not restore “%s”, coupon not found."
+msgid "Ubac Store Credit: could not restore “%s”, coupon not found."
 msgstr ""
 
 #. translators: %s: coupon code */
 #: includes/class-ubac-credit-core.php:408
-msgid "Dahu Store Credit: coupon “%s” no longer exists; nothing was processed."
+msgid "Ubac Store Credit: coupon “%s” no longer exists; nothing was processed."
 msgstr ""
 
 #: includes/class-ubac-credit-admin.php:275
@@ -105,7 +105,7 @@ msgid "Email restriction"
 msgstr ""
 
 #: includes/class-ubac-credit-admin.php:104
-msgid "Enable Dahu Store Credit"
+msgid "Enable Ubac Store Credit"
 msgstr ""
 
 #: ubac-credit.php:173
@@ -203,7 +203,7 @@ msgid "The balance of this store credit is currently too low, or already reserve
 msgstr ""
 
 #: includes/class-ubac-credit-core.php:90
-msgid "This coupon is marked as store credit but is not of the “Fixed cart discount” type. Dahu Store Credit will ignore it."
+msgid "This coupon is marked as store credit but is not of the “Fixed cart discount” type. Ubac Store Credit will ignore it."
 msgstr ""
 
 #: includes/class-ubac-credit-admin.php:262
@@ -272,7 +272,7 @@ msgid "Store credit %1$s: this order id already carried a charge of %2$s made by
 msgstr ""
 
 #: includes/class-ubac-credit-core.php:2162
-msgid "Dahu Store Credit: %1$s returned to %2$s, the credit's share of a partial refund covering %3$s of this order."
+msgid "Ubac Store Credit: %1$s returned to %2$s, the credit's share of a partial refund covering %3$s of this order."
 msgstr ""
 
 #: includes/class-ubac-credit-core.php:1412

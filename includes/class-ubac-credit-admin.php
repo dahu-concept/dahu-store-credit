@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * The admin screens: settings, the store-credit table, and the coupon history.
  */
-class Dahu_Store_Credit_Admin {
+class Ubac_Credit_Admin {
 
 	private static $instance = null;
 
@@ -28,10 +28,10 @@ class Dahu_Store_Credit_Admin {
 	public function add_settings_page() {
 		add_submenu_page(
 			'woocommerce',
-			__( 'Dahu Store Credit', 'ubac-credit' ),
-			__( 'Dahu Store Credit', 'ubac-credit' ),
+			__( 'Ubac Store Credit', 'ubac-credit' ),
+			__( 'Ubac Store Credit', 'ubac-credit' ),
 			'manage_woocommerce',
-			'dahu-store-credit',
+			'ubac-credit',
 			array( $this, 'render_settings_page' )
 		);
 	}
@@ -44,7 +44,7 @@ class Dahu_Store_Credit_Admin {
 	 */
 	public function enqueue_admin( $hook ) {
 
-		if ( 'woocommerce_page_dahu-store-credit' !== $hook ) {
+		if ( 'woocommerce_page_ubac-credit' !== $hook ) {
 			return;
 		}
 
@@ -54,22 +54,22 @@ class Dahu_Store_Credit_Admin {
 		// file is byte-identical everywhere, so whichever plugin loads it
 		// first serves all of them.
 		wp_enqueue_style(
-			'dahu-ui',
-			plugins_url( 'assets/css/dahu-ui.css', DAHU_STORE_CREDIT_FILE ),
+			'ubac-ui',
+			plugins_url( 'assets/css/ubac-ui.css', UBAC_CREDIT_FILE ),
 			array(),
-			DAHU_STORE_CREDIT_VERSION
+			UBAC_CREDIT_VERSION
 		);
 
 		wp_enqueue_style(
-			'dahu-store-credit-admin',
-			plugins_url( 'assets/css/admin.css', DAHU_STORE_CREDIT_FILE ),
-			array( 'dahu-ui' ),
-			DAHU_STORE_CREDIT_VERSION
+			'ubac-credit-admin',
+			plugins_url( 'assets/css/admin.css', UBAC_CREDIT_FILE ),
+			array( 'ubac-ui' ),
+			UBAC_CREDIT_VERSION
 		);
 	}
 
 	public function register_settings() {
-		register_setting( 'dahu_store_credit_settings_group', 'dahu_store_credit_settings', array( $this, 'sanitize_settings' ) );
+		register_setting( 'ubac_credit_settings_group', 'ubac_credit_settings', array( $this, 'sanitize_settings' ) );
 	}
 
 	public function sanitize_settings( $input ) {
@@ -84,27 +84,27 @@ class Dahu_Store_Credit_Admin {
 			return;
 		}
 
-		$settings       = get_option( 'dahu_store_credit_settings', array() );
+		$settings       = get_option( 'ubac_credit_settings', array() );
 		$enabled        = isset( $settings['enabled'] ) ? $settings['enabled'] : 'yes';
 		$extension_days = isset( $settings['extension_days'] ) ? (int) $settings['extension_days'] : 0;
 
 		?>
-		<div class="wrap dahu-ui">
-			<div class="dahu-ui-head">
-				<h1 class="dahu-ui-head__title"><?php esc_html_e( 'Store credit', 'ubac-credit' ); ?></h1>
-				<p class="dahu-ui-head__sub"><?php esc_html_e( 'Credit a customer can spend at the checkout, and where it came from.', 'ubac-credit' ); ?></p>
+		<div class="wrap ubac-ui">
+			<div class="ubac-ui-head">
+				<h1 class="ubac-ui-head__title"><?php esc_html_e( 'Store credit', 'ubac-credit' ); ?></h1>
+				<p class="ubac-ui-head__sub"><?php esc_html_e( 'Credit a customer can spend at the checkout, and where it came from.', 'ubac-credit' ); ?></p>
 			</div>
 
 			<hr class="wp-header-end">
 			<form method="post" action="options.php">
-				<?php settings_fields( 'dahu_store_credit_settings_group' ); ?>
-				<div class="dahu-ui-card">
+				<?php settings_fields( 'ubac_credit_settings_group' ); ?>
+				<div class="ubac-ui-card">
 				<table class="form-table">
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Enable Dahu Store Credit', 'ubac-credit' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Enable Ubac Store Credit', 'ubac-credit' ); ?></th>
 						<td>
 							<label>
-								<input type="checkbox" name="dahu_store_credit_settings[enabled]" value="yes" <?php checked( $enabled, 'yes' ); ?> />
+								<input type="checkbox" name="ubac_credit_settings[enabled]" value="yes" <?php checked( $enabled, 'yes' ); ?> />
 								<?php esc_html_e( 'Automatically carry the remaining balance forward after payment', 'ubac-credit' ); ?>
 							</label>
 						</td>
@@ -112,18 +112,18 @@ class Dahu_Store_Credit_Admin {
 					<tr>
 						<th scope="row"><?php esc_html_e( 'Validity extension', 'ubac-credit' ); ?></th>
 						<td>
-							<input type="number" min="0" step="1" name="dahu_store_credit_settings[extension_days]" value="<?php echo esc_attr( $extension_days ); ?>" class="small-text" />
+							<input type="number" min="0" step="1" name="ubac_credit_settings[extension_days]" value="<?php echo esc_attr( $extension_days ); ?>" class="small-text" />
 							<p class="description"><?php esc_html_e( 'Days added to the expiry date on each partial use. 0 leaves the expiry date alone.', 'ubac-credit' ); ?></p>
 						</td>
 					</tr>
 				</table>
 				</div>
-				<?php submit_button( null, 'dahu-ui-btn dahu-ui-btn--go' ); ?>
+				<?php submit_button( null, 'ubac-ui-btn ubac-ui-btn--go' ); ?>
 			</form>
 
-			<div class="dahu-ui-card" id="dahu-store-credit-list">
-				<div class="dahu-ui-card__head">
-					<h2 class="dahu-ui-card__title"><?php esc_html_e( 'Active store credits', 'ubac-credit' ); ?></h2>
+			<div class="ubac-ui-card" id="ubac-credit-list">
+				<div class="ubac-ui-card__head">
+					<h2 class="ubac-ui-card__title"><?php esc_html_e( 'Active store credits', 'ubac-credit' ); ?></h2>
 				</div>
 				<?php $this->render_coupons_table(); ?>
 			</div>
@@ -134,7 +134,7 @@ class Dahu_Store_Credit_Admin {
 	/**
 	 * Query argument carrying the page of the table.
 	 */
-	const PAGE_VAR = 'dahu_store_credit_page';
+	const PAGE_VAR = 'ubac_credit_page';
 
 	/**
 	 * How many store credits one page of the table holds.
@@ -162,7 +162,7 @@ class Dahu_Store_Credit_Admin {
 				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- the only way to list credits; admin screen, bounded by PER_PAGE and paged.
 				'meta_query'     => array(
 					array(
-						'key'   => '_dahu_store_credit',
+						'key'   => '_ubac_credit',
 						'value' => 'yes',
 					),
 				),
@@ -173,7 +173,7 @@ class Dahu_Store_Credit_Admin {
 
 		if ( ! $query->have_posts() ) {
 			printf(
-				'<p class="dahu-ui-hint">%s</p><p><a class="dahu-ui-btn" href="%s">%s</a></p>',
+				'<p class="ubac-ui-hint">%s</p><p><a class="ubac-ui-btn" href="%s">%s</a></p>',
 				esc_html__( 'No store credit recorded yet. A fixed-cart coupon ticked as store credit appears here.', 'ubac-credit' ),
 				esc_url( admin_url( 'post-new.php?post_type=shop_coupon' ) ),
 				esc_html__( 'Create a coupon', 'ubac-credit' )
@@ -182,7 +182,7 @@ class Dahu_Store_Credit_Admin {
 		}
 
 		?>
-		<table class="dahu-ui-table">
+		<table class="ubac-ui-table">
 			<thead>
 				<tr>
 					<th><?php esc_html_e( 'Code', 'ubac-credit' ); ?></th>
@@ -240,14 +240,14 @@ class Dahu_Store_Credit_Admin {
 		);
 
 		if ( $links ) {
-			echo '<p class="dahu-ui-hint tablenav-pages">' . wp_kses_post( $links ) . '</p>';
+			echo '<p class="ubac-ui-hint tablenav-pages">' . wp_kses_post( $links ) . '</p>';
 		}
 	}
 
 	public function add_history_metabox() {
 		add_meta_box(
-			'dahu_store_credit_history',
-			__( 'Dahu Store Credit history', 'ubac-credit' ),
+			'ubac_credit_history',
+			__( 'Ubac Store Credit history', 'ubac-credit' ),
 			array( $this, 'render_history_metabox' ),
 			'shop_coupon',
 			'normal',
@@ -257,9 +257,9 @@ class Dahu_Store_Credit_Admin {
 
 	public function render_history_metabox( $post ) {
 		$coupon  = new WC_Coupon( $post->ID );
-		$history = $coupon->get_meta( '_dahu_store_credit_history' );
+		$history = $coupon->get_meta( '_ubac_credit_history' );
 
-		if ( 'yes' !== $coupon->get_meta( '_dahu_store_credit' ) ) {
+		if ( 'yes' !== $coupon->get_meta( '_ubac_credit' ) ) {
 			echo '<p>' . esc_html__( 'This coupon is not marked as store credit.', 'ubac-credit' ) . '</p>';
 			return;
 		}
@@ -270,7 +270,7 @@ class Dahu_Store_Credit_Admin {
 		}
 
 		?>
-		<table class="dahu-ui-table">
+		<table class="ubac-ui-table">
 			<thead>
 				<tr>
 					<th><?php esc_html_e( 'Date', 'ubac-credit' ); ?></th>

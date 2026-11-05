@@ -7,7 +7,7 @@ msgstr ""
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "PO-Revision-Date: 2026-10-31 11:09+0000\n"
-"X-Generator: dahu i18n-build\n"
+"X-Generator: ubac i18n-build\n"
 
 #: ubac-credit.php:164
 msgid "A balance per customer"
@@ -62,26 +62,26 @@ msgid "Current balance"
 msgstr "Solde actuel"
 
 #: includes/class-ubac-credit-admin.php:31 includes/class-ubac-credit-admin.php:32
-msgid "Dahu Store Credit"
-msgstr "Dahu Store Credit"
+msgid "Ubac Store Credit"
+msgstr "Ubac Store Credit"
 
 #: includes/class-ubac-credit-admin.php:249
-msgid "Dahu Store Credit history"
+msgid "Ubac Store Credit history"
 msgstr "Historique des avoirs"
 
 #: ubac-credit.php:53
-msgid "Dahu Store Credit requires WooCommerce."
-msgstr "Dahu Store Credit nécessite WooCommerce."
+msgid "Ubac Store Credit requires WooCommerce."
+msgstr "Ubac Store Credit nécessite WooCommerce."
 
 #. translators: %s: coupon code */
 #: includes/class-ubac-credit-core.php:641
-msgid "Dahu Store Credit: could not restore “%s”, coupon not found."
-msgstr "Dahu Store Credit : impossible de recréditer « %s », code promo introuvable."
+msgid "Ubac Store Credit: could not restore “%s”, coupon not found."
+msgstr "Ubac Store Credit : impossible de recréditer « %s », code promo introuvable."
 
 #. translators: %s: coupon code */
 #: includes/class-ubac-credit-core.php:408
-msgid "Dahu Store Credit: coupon “%s” no longer exists; nothing was processed."
-msgstr "Dahu Store Credit : le code promo « %s » n’existe plus, rien n’a été traité."
+msgid "Ubac Store Credit: coupon “%s” no longer exists; nothing was processed."
+msgstr "Ubac Store Credit : le code promo « %s » n’existe plus, rien n’a été traité."
 
 #: includes/class-ubac-credit-admin.php:275
 msgid "Date"
@@ -104,8 +104,8 @@ msgid "Email restriction"
 msgstr "Restriction par e-mail"
 
 #: includes/class-ubac-credit-admin.php:104
-msgid "Enable Dahu Store Credit"
-msgstr "Activer Dahu Store Credit"
+msgid "Enable Ubac Store Credit"
+msgstr "Activer Ubac Store Credit"
 
 #: ubac-credit.php:173
 msgid "Every movement says who made it and why."
@@ -202,8 +202,8 @@ msgid "The balance of this store credit is currently too low, or already reserve
 msgstr "Le solde de cet avoir est trop faible, ou déjà réservé par une autre commande en attente de paiement."
 
 #: includes/class-ubac-credit-core.php:90
-msgid "This coupon is marked as store credit but is not of the “Fixed cart discount” type. Dahu Store Credit will ignore it."
-msgstr "Ce code promo est marqué comme avoir mais n’est pas de type « Remise fixe sur le panier ». Dahu Store Credit l’ignorera."
+msgid "This coupon is marked as store credit but is not of the “Fixed cart discount” type. Ubac Store Credit will ignore it."
+msgstr "Ce code promo est marqué comme avoir mais n’est pas de type « Remise fixe sur le panier ». Ubac Store Credit l’ignorera."
 
 #: includes/class-ubac-credit-admin.php:262
 msgid "This coupon is not marked as store credit."
@@ -271,8 +271,8 @@ msgid "Store credit %1$s: this order id already carried a charge of %2$s made by
 msgstr "Avoir %1$s : cet identifiant de commande portait déjà un prélèvement de %2$s effectué par une autre commande, qui n’existe plus. Cet enregistrement a été remplacé par celui-ci."
 
 #: includes/class-ubac-credit-core.php:2162
-msgid "Dahu Store Credit: %1$s returned to %2$s, the credit's share of a partial refund covering %3$s of this order."
-msgstr "Dahu Avoir : %1$s rendus à %2$s, la part de l’avoir dans un remboursement partiel portant sur %3$s de cette commande."
+msgid "Ubac Store Credit: %1$s returned to %2$s, the credit's share of a partial refund covering %3$s of this order."
+msgstr "Ubac Avoir : %1$s rendus à %2$s, la part de l’avoir dans un remboursement partiel portant sur %3$s de cette commande."
 
 #: includes/class-ubac-credit-core.php:1412
 msgid "Store credit %s: the record of what had already been returned on this order could not be read, so it was treated as nothing returned yet. Check that credit's balance and its history."

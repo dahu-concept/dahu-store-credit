@@ -15,17 +15,17 @@
  * WC requires at least: 7.0
  * WC tested up to:   11.2
  *
- * @package DahuStoreCredit
+ * @package UbacCredit
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'DAHU_STORE_CREDIT_VERSION', '1.2.0' );
-define( 'DAHU_STORE_CREDIT_FILE', __FILE__ );
-define( 'DAHU_STORE_CREDIT_PATH', plugin_dir_path( __FILE__ ) );
-define( 'DAHU_STORE_CREDIT_URL', plugin_dir_url( __FILE__ ) );
+define( 'UBAC_CREDIT_VERSION', '1.2.0' );
+define( 'UBAC_CREDIT_FILE', __FILE__ );
+define( 'UBAC_CREDIT_PATH', plugin_dir_path( __FILE__ ) );
+define( 'UBAC_CREDIT_URL', plugin_dir_url( __FILE__ ) );
 
 /* -------------------------------------------------------------------------
  * Translations
@@ -41,37 +41,37 @@ add_action(
 	'before_woocommerce_init',
 	function () {
 		if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
-			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', DAHU_STORE_CREDIT_FILE, true );
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', UBAC_CREDIT_FILE, true );
 		}
 	}
 );
 
-add_action( 'plugins_loaded', 'dahu_store_credit_init' );
+add_action( 'plugins_loaded', 'ubac_credit_init' );
 
-function dahu_store_credit_init() {
+function ubac_credit_init() {
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		add_action(
 			'admin_notices',
 			function () {
-				echo '<div class="notice notice-error"><p>' . esc_html__( 'Dahu Store Credit requires WooCommerce.', 'ubac-credit' ) . '</p></div>';
+				echo '<div class="notice notice-error"><p>' . esc_html__( 'Ubac Store Credit requires WooCommerce.', 'ubac-credit' ) . '</p></div>';
 			}
 		);
 		return;
 	}
 
-	require_once DAHU_STORE_CREDIT_PATH . 'includes/class-dahu-store-credit-core.php';
-	require_once DAHU_STORE_CREDIT_PATH . 'includes/class-dahu-store-credit-admin.php';
+	require_once UBAC_CREDIT_PATH . 'includes/class-ubac-credit-core.php';
+	require_once UBAC_CREDIT_PATH . 'includes/class-ubac-credit-admin.php';
 
-	Dahu_Store_Credit_Core::instance();
-	Dahu_Store_Credit_Admin::instance();
+	Ubac_Credit_Core::instance();
+	Ubac_Credit_Admin::instance();
 }
 
 add_filter(
-	'plugin_action_links_' . plugin_basename( DAHU_STORE_CREDIT_FILE ),
+	'plugin_action_links_' . plugin_basename( UBAC_CREDIT_FILE ),
 	static function ( $links ) {
 		$settings = sprintf(
 			'<a href="%s">%s</a>',
-			esc_url( admin_url( 'admin.php?page=dahu-store-credit' ) ),
+			esc_url( admin_url( 'admin.php?page=ubac-credit' ) ),
 			esc_html__( 'Settings', 'ubac-credit' )
 		);
 		array_unshift( $links, $settings );
@@ -82,8 +82,8 @@ add_filter(
 add_filter(
 	'plugin_row_meta',
 	function ( $links, $file ) {
-		if ( plugin_basename( DAHU_STORE_CREDIT_FILE ) === $file ) {
-			$header = get_file_data( DAHU_STORE_CREDIT_FILE, array( 'Version' => 'Version' ) );
+		if ( plugin_basename( UBAC_CREDIT_FILE ) === $file ) {
+			$header = get_file_data( UBAC_CREDIT_FILE, array( 'Version' => 'Version' ) );
 			$links  = array(
 				sprintf(
 					/* translators: %s: plugin version number. */
@@ -114,7 +114,7 @@ add_filter(
  * Registered here rather than inside the admin include, because the
  * activation flag has to be set whatever else is loaded.
  */
-require_once DAHU_STORE_CREDIT_PATH . 'includes/dahu-welcome.php';
+require_once UBAC_CREDIT_PATH . 'includes/ubac-welcome.php';
 
 /*
  * The flag, not a redirect: an activation hook that redirects breaks bulk
@@ -125,21 +125,21 @@ require_once DAHU_STORE_CREDIT_PATH . 'includes/dahu-welcome.php';
 register_activation_hook(
 	__FILE__,
 	static function () {
-		Dahu_Welcome::mark_activated( 'dahu-store-credit' );
+		Ubac_Welcome::mark_activated( 'ubac-credit' );
 	}
 );
 
 add_action(
 	'init',
 	static function () {
-		Dahu_Welcome::register(
+		Ubac_Welcome::register(
 			array(
-				'slug'       => 'dahu-store-credit',
+				'slug'       => 'ubac-credit',
 				'name'       => __( 'Store credit', 'ubac-credit' ),
 				'tagline'    => __( 'Credit a customer can spend at the checkout, and where it came from.', 'ubac-credit' ),
-				'file'       => DAHU_STORE_CREDIT_FILE,
-				'version'    => DAHU_STORE_CREDIT_VERSION,
-				'textdomain' => 'dahu-store-credit',
+				'file'       => UBAC_CREDIT_FILE,
+				'version'    => UBAC_CREDIT_VERSION,
+				'textdomain' => 'ubac-credit',
 				'mark'       => array(
 					'view'  => '0 0 112 112',
 					'paths' => array(
@@ -185,20 +185,20 @@ add_action(
 				 * without a sound, so only the card is targeted, never the table
 				 * inside it (rendered only once a coupon is marked).
 				 */
-				'tour_screen' => 'woocommerce_page_dahu-store-credit',
+				'tour_screen' => 'woocommerce_page_ubac-credit',
 				'tour'        => array(
 					array(
-						'selector' => '#dahu-store-credit-list',
+						'selector' => '#ubac-credit-list',
 						'title'    => __( 'Coupons become a balance', 'ubac-credit' ),
 						'text'     => __( 'What is left on a coupon stays available for the next order.', 'ubac-credit' ),
 					),
 					array(
-						'selector' => 'input[name="dahu_store_credit_settings[enabled]"]',
+						'selector' => 'input[name="ubac_credit_settings[enabled]"]',
 						'title'    => __( 'Switch it on or off', 'ubac-credit' ),
 						'text'     => __( 'When on, the remaining balance is carried forward after payment.', 'ubac-credit' ),
 					),
 					array(
-						'selector' => 'input[name="dahu_store_credit_settings[extension_days]"]',
+						'selector' => 'input[name="ubac_credit_settings[extension_days]"]',
 						'title'    => __( 'Extend the validity', 'ubac-credit' ),
 						'text'     => __( 'Days added to the expiry date on each partial use.', 'ubac-credit' ),
 					),

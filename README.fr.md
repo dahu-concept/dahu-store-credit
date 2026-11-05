@@ -1,4 +1,4 @@
-# Dahu Store Credit
+# Ubac Store Credit
 
 Transforme un code promo WooCommerce à montant fixe en véritable avoir : ce qui
 reste est reporté au lieu d'être perdu.
@@ -68,7 +68,7 @@ un code coché mais d'un autre type est ignoré, et l'écran du code promo le di
 Supprimer l'extension retire ses réglages. Les soldes, les marqueurs et
 l'historique des codes promo sont **conservés** : les retirer retransformerait
 en silence chaque avoir en code promo consommé en entier, ce qui changerait des
-soldes clients réels. Définissez `dahu_store_credit_remove_data_on_uninstall`
+soldes clients réels. Définissez `ubac_credit_remove_data_on_uninstall`
 à une valeur vraie avant la suppression pour tout effacer.
 
 ## Services externes

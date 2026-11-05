@@ -1,5 +1,5 @@
 === Ubac Store Credit ===
-Contributors: dahuconcept
+Contributors: ubacconcept
 Tags: woocommerce, store credit, coupons, refunds, vouchers
 Requires at least: 6.0
 Tested up to: 7.1
@@ -16,7 +16,7 @@ A WooCommerce fixed-cart coupon is spent whole. A customer holding a 100 credit
 who orders for 40 loses the other 60. That is fine for a discount voucher and
 wrong for store credit, a refund or a gift card.
 
-Dahu Store Credit fixes exactly that. Tick one box on a coupon and, once an
+Ubac Store Credit fixes exactly that. Tick one box on a coupon and, once an
 order using it is paid, the plugin writes the remaining balance back onto the
 same coupon. The customer keeps the same code, with less on it.
 
@@ -60,7 +60,7 @@ This plugin does not contact any external service.
 3. Create a coupon of type "Fixed cart discount" and tick **Store credit
    (balance carries forward)** in its General tab.
 
-Settings live under WooCommerce > Dahu Store Credit.
+Settings live under WooCommerce > Ubac Store Credit.
 
 == Frequently Asked Questions ==
 
@@ -90,7 +90,7 @@ before the coupon is accepted.
 
 Settings are removed; coupon balances, flags and history are kept. Removing
 them would quietly turn every store credit back into an ordinary coupon spent
-whole. Set `dahu_store_credit_remove_data_on_uninstall` to a truthy value
+whole. Set `ubac_credit_remove_data_on_uninstall` to a truthy value
 before deleting if you really want them gone.
 
 == Screenshots ==

@@ -6,14 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * The business logic: marking coupons, carrying the balance forward, restoring it.
  */
-class Dahu_Store_Credit_Core {
+class Ubac_Credit_Core {
 
 	/**
 	 * Order meta holding what each credit actually gave to this order, as an
 	 * array keyed by coupon code. A single fixed key, so uninstalling finds
 	 * it without a prefix search.
 	 */
-	const TAKEN_META = '_dahu_store_credit_taken';
+	const TAKEN_META = '_ubac_credit_taken';
 
 	/**
 	 * Coupon meta listing the orders whose refund has already been credited to
@@ -22,7 +22,7 @@ class Dahu_Store_Credit_Core {
 	 * nothing in between. An order-side marker could not do that -- see
 	 * restore_order().
 	 */
-	const REFUNDED_META = '_dahu_store_credit_refunded_orders';
+	const REFUNDED_META = '_ubac_credit_refunded_orders';
 
 	/**
 	 * What each order took from THIS credit, kept on the credit itself.
@@ -68,7 +68,7 @@ class Dahu_Store_Credit_Core {
 	 * orders had before. New orders get the stronger guarantee, old ones keep
 	 * the one they were charged under, and nothing has to be migrated.
 	 */
-	const TAKEN_BY_META = '_dahu_store_credit_taken_by_orders';
+	const TAKEN_BY_META = '_ubac_credit_taken_by_orders';
 
 	/**
 	 * WHICH order, and not merely which id, each register entry is about.
@@ -91,7 +91,7 @@ class Dahu_Store_Credit_Core {
 	 * have none, and entries written before this map existed have none either.
 	 * Only two keys that are both present and different mean "another order".
 	 */
-	const TAKEN_KEYS_META = '_dahu_store_credit_taken_by_order_keys';
+	const TAKEN_KEYS_META = '_ubac_credit_taken_by_order_keys';
 
 	/**
 	 * WHAT HAS ALREADY BEEN GIVEN BACK, per order, kept on the credit.
@@ -110,7 +110,7 @@ class Dahu_Store_Credit_Core {
 	 * on the credit is the audit trail; this record is only the running total
 	 * of one cycle.
 	 */
-	const GIVEN_BACK_META = '_dahu_store_credit_given_back';
+	const GIVEN_BACK_META = '_ubac_credit_given_back';
 
 	/**
 	 * The codes, on this order, whose register lives on the credit.
@@ -161,14 +161,14 @@ class Dahu_Store_Credit_Core {
 	 * order's audit copy — filed by code, and surviving the replacement — is
 	 * what counts.
 	 */
-	const REGISTER_CODES_META = '_dahu_store_credit_register_codes';
+	const REGISTER_CODES_META = '_ubac_credit_register_codes';
 
 	/**
 	 * Order meta listing the one-off messages already written on this order, so
 	 * a hook that fires again does not repeat them. Measured before it existed:
 	 * five passes of a cancelled order wrote the same refusal note five times.
 	 */
-	const SAID_META = '_dahu_store_credit_said';
+	const SAID_META = '_ubac_credit_said';
 
 
 	private static $instance = null;
@@ -218,13 +218,13 @@ class Dahu_Store_Credit_Core {
 	}
 
 	private function is_enabled() {
-		$settings = get_option( 'dahu_store_credit_settings', array() );
+		$settings = get_option( 'ubac_credit_settings', array() );
 		$enabled  = isset( $settings['enabled'] ) ? $settings['enabled'] : 'yes';
 		return 'yes' === $enabled;
 	}
 
 	private function extension_days() {
-		$settings = get_option( 'dahu_store_credit_settings', array() );
+		$settings = get_option( 'ubac_credit_settings', array() );
 		$days     = isset( $settings['extension_days'] ) ? (int) $settings['extension_days'] : 0;
 		return max( 0, $days );
 	}
@@ -240,7 +240,7 @@ class Dahu_Store_Credit_Core {
 		echo '<div class="options_group">';
 		woocommerce_wp_checkbox(
 			array(
-				'id'          => '_dahu_store_credit',
+				'id'          => '_ubac_credit',
 				'label'       => __( 'Store credit (balance carries forward)', 'ubac-credit' ),
 				'description' => __( 'When ticked, whatever is left of this fixed-cart coupon is carried forward after payment instead of being lost.', 'ubac-credit' ),
 				'desc_tip'    => true,
@@ -248,8 +248,8 @@ class Dahu_Store_Credit_Core {
 		);
 		echo '</div>';
 
-		if ( $coupon_id && 'yes' === $coupon->get_meta( '_dahu_store_credit' ) && 'fixed_cart' !== $coupon->get_discount_type() ) {
-			echo '<div class="notice notice-warning inline"><p>' . esc_html__( 'This coupon is marked as store credit but is not of the “Fixed cart discount” type. Dahu Store Credit will ignore it.', 'ubac-credit' ) . '</p></div>';
+		if ( $coupon_id && 'yes' === $coupon->get_meta( '_ubac_credit' ) && 'fixed_cart' !== $coupon->get_discount_type() ) {
+			echo '<div class="notice notice-warning inline"><p>' . esc_html__( 'This coupon is marked as store credit but is not of the “Fixed cart discount” type. Ubac Store Credit will ignore it.', 'ubac-credit' ) . '</p></div>';
 		}
 	}
 
@@ -277,14 +277,14 @@ class Dahu_Store_Credit_Core {
 			return;
 		}
 
-		$value = isset( $_POST['_dahu_store_credit'] ) ? 'yes' : 'no';
+		$value = isset( $_POST['_ubac_credit'] ) ? 'yes' : 'no';
 
-		$coupon->update_meta_data( '_dahu_store_credit', $value );
+		$coupon->update_meta_data( '_ubac_credit', $value );
 		$coupon->save();
 	}
 
 	/**
-	 * Is this coupon handled by Dahu Store Credit?
+	 * Is this coupon handled by Ubac Store Credit?
 	 *
 	 * The meta is read straight from the database, bypassing the object cache:
 	 * a WC_Coupon left stale after a recent save would otherwise produce a
@@ -294,17 +294,17 @@ class Dahu_Store_Credit_Core {
 	 * @param WC_Coupon $coupon Coupon object.
 	 * @return bool
 	 */
-	private function is_dahu_store_credit_coupon( WC_Coupon $coupon ) {
-		$meta = $coupon->get_meta( '_dahu_store_credit' );
+	private function is_ubac_credit_coupon( WC_Coupon $coupon ) {
+		$meta = $coupon->get_meta( '_ubac_credit' );
 		if ( '' === $meta || null === $meta ) {
-			$meta = get_post_meta( $coupon->get_id(), '_dahu_store_credit', true );
+			$meta = get_post_meta( $coupon->get_id(), '_ubac_credit', true );
 		}
 		return 'fixed_cart' === $coupon->get_discount_type() && 'yes' === $meta;
 	}
 
 	private function log( $message ) {
 		if ( function_exists( 'wc_get_logger' ) ) {
-			wc_get_logger()->debug( $message, array( 'source' => 'dahu-store-credit' ) );
+			wc_get_logger()->debug( $message, array( 'source' => 'ubac-credit' ) );
 		}
 	}
 
@@ -324,7 +324,7 @@ class Dahu_Store_Credit_Core {
 	 * @return float Amount already claimed by unpaid orders.
 	 */
 	private function get_reserved_amount( WC_Coupon $coupon ) {
-		$cache_key = 'dahu_store_credit_reserved_' . $coupon->get_id();
+		$cache_key = 'ubac_credit_reserved_' . $coupon->get_id();
 		$cached    = get_transient( $cache_key );
 		if ( false !== $cached ) {
 			return (float) $cached;
@@ -434,7 +434,7 @@ class Dahu_Store_Credit_Core {
 				continue;
 			}
 
-			if ( 'yes' === $order->get_meta( '_dahu_store_credit_processed' ) ) {
+			if ( 'yes' === $order->get_meta( '_ubac_credit_processed' ) ) {
 				continue;
 			}
 			foreach ( $order->get_items( 'coupon' ) as $item ) {
@@ -451,7 +451,7 @@ class Dahu_Store_Credit_Core {
 	}
 
 	private function clear_reserved_cache( $coupon_id ) {
-		delete_transient( 'dahu_store_credit_reserved_' . $coupon_id );
+		delete_transient( 'ubac_credit_reserved_' . $coupon_id );
 	}
 
 	/**
@@ -470,7 +470,7 @@ class Dahu_Store_Credit_Core {
 			return $valid;
 		}
 
-		if ( ! $this->is_dahu_store_credit_coupon( $coupon ) ) {
+		if ( ! $this->is_ubac_credit_coupon( $coupon ) ) {
 			return $valid;
 		}
 
@@ -489,7 +489,7 @@ class Dahu_Store_Credit_Core {
 	}
 
 	public function customize_coupon_error( $err, $err_code, $coupon ) {
-		if ( 100 === $err_code && $coupon instanceof WC_Coupon && $this->is_dahu_store_credit_coupon( $coupon ) ) {
+		if ( 100 === $err_code && $coupon instanceof WC_Coupon && $this->is_ubac_credit_coupon( $coupon ) ) {
 			return __( 'The balance of this store credit is currently too low, or already reserved by another order awaiting payment.', 'ubac-credit' );
 		}
 		return $err;
@@ -505,7 +505,7 @@ class Dahu_Store_Credit_Core {
 		$this->log( "process_order() called for order #{$order_id}" );
 
 		if ( ! $this->is_enabled() ) {
-			$this->log( 'Dahu Store Credit is switched off in the settings; nothing processed.' );
+			$this->log( 'Ubac Store Credit is switched off in the settings; nothing processed.' );
 			return;
 		}
 
@@ -516,7 +516,7 @@ class Dahu_Store_Credit_Core {
 		}
 
 		/*
-		 * `_dahu_store_credit_processed` IS NO LONGER A GATE.
+		 * `_ubac_credit_processed` IS NO LONGER A GATE.
 		 *
 		 * It was, and that is what made the fix "a record of zero leaves the
 		 * credit chargeable again" useless: the gate returned before the loop
@@ -583,7 +583,7 @@ class Dahu_Store_Credit_Core {
 			 *
 			 * EXCEPT THAT THIS IS ALMOST NEVER REACHED, and saying so is worth
 			 * more than the sentence above. Nothing clears
-			 * `_dahu_store_credit_processed`: a refund sets its own marker and
+			 * `_ubac_credit_processed`: a refund sets its own marker and
 			 * leaves that one at 'yes', so the guard at the top of this method
 			 * returns before the loop ever reads the zero. Measured on a plain
 			 * cycle with no interruption at all -- charge, cancel, then back to
@@ -593,7 +593,7 @@ class Dahu_Store_Credit_Core {
 			 * The only path that does read the zero is the one where an
 			 * interruption took the after-loop marker with it. Making the
 			 * sentence above true in the ordinary cycle means the refund must
-			 * clear `_dahu_store_credit_processed` in the same save that sets
+			 * clear `_ubac_credit_processed` in the same save that sets
 			 * its own marker, and that is the pending decision about those two
 			 * flags -- not something to improvise in this guard.
 			 */
@@ -716,7 +716,7 @@ class Dahu_Store_Credit_Core {
 				$order->add_order_note(
 					sprintf(
 						/* translators: %s: coupon code */
-						__( 'Dahu Store Credit: coupon “%s” no longer exists; nothing was processed.', 'ubac-credit' ),
+						__( 'Ubac Store Credit: coupon “%s” no longer exists; nothing was processed.', 'ubac-credit' ),
 						$code
 					)
 				);
@@ -724,7 +724,7 @@ class Dahu_Store_Credit_Core {
 			}
 
 			// Built further up, for the register guard.
-			if ( ! $this->is_dahu_store_credit_coupon( $coupon ) ) {
+			if ( ! $this->is_ubac_credit_coupon( $coupon ) ) {
 				// An ordinary coupon is the normal case, not a problem: a shop
 				// using plain coupons alongside store credit would otherwise
 				// get a note on every order. It also used to print the raw
@@ -732,11 +732,11 @@ class Dahu_Store_Credit_Core {
 				// not something a merchant should read.
 				$this->log(
 					sprintf(
-						'Order #%1$d: coupon "%2$s" is not store credit (type=%3$s, _dahu_store_credit=%4$s); left alone.',
+						'Order #%1$d: coupon "%2$s" is not store credit (type=%3$s, _ubac_credit=%4$s); left alone.',
 						$order_id,
 						$code,
 						$coupon->get_discount_type(),
-						$coupon->get_meta( '_dahu_store_credit' ) ? $coupon->get_meta( '_dahu_store_credit' ) : '(empty)'
+						$coupon->get_meta( '_ubac_credit' ) ? $coupon->get_meta( '_ubac_credit' ) : '(empty)'
 					)
 				);
 				continue;
@@ -1067,8 +1067,8 @@ class Dahu_Store_Credit_Core {
 			 * last pass did -- and a summary cannot say two contradictory
 			 * things at once.
 			 */
-			$order->update_meta_data( '_dahu_store_credit_processed', 'yes' );
-			$order->update_meta_data( '_dahu_store_credit_restored', '' );
+			$order->update_meta_data( '_ubac_credit_processed', 'yes' );
+			$order->update_meta_data( '_ubac_credit_restored', '' );
 			$order->save();
 		}
 	}
@@ -1123,7 +1123,7 @@ class Dahu_Store_Credit_Core {
 		 */
 
 		/*
-		 * `_dahu_store_credit_restored` IS NO LONGER A GATE EITHER, and this
+		 * `_ubac_credit_restored` IS NO LONGER A GATE EITHER, and this
 		 * one took money from a customer for good.
 		 *
 		 * Found by an adverse review and then measured. The flag is cleared
@@ -1137,7 +1137,7 @@ class Dahu_Store_Credit_Core {
 		 * Measured at 40,00 EUR missing after five process-then-restore
 		 * rounds, on two of the forty-eight cut ranks.
 		 *
-		 * Same remedy as for `_dahu_store_credit_processed`, and the same
+		 * Same remedy as for `_ubac_credit_processed`, and the same
 		 * reason: what prevents a second credit-back is not an order-wide
 		 * flag but `REFUNDED_META`, carried by the credit and written by the
 		 * save that credits it, one credit at a time. The loop is therefore
@@ -1238,7 +1238,7 @@ class Dahu_Store_Credit_Core {
 				if ( ! empty( $claim['recorded'] ) ) {
 					$this->say_once( $order, 'notfound-' . wc_format_coupon_code( $code ), sprintf(
 						/* translators: %s: coupon code */
-						__( 'Dahu Store Credit: could not restore “%s”, coupon not found.', 'ubac-credit' ),
+						__( 'Ubac Store Credit: could not restore “%s”, coupon not found.', 'ubac-credit' ),
 						$code
 					) );
 				}
@@ -1248,7 +1248,7 @@ class Dahu_Store_Credit_Core {
 
 			$coupon = new WC_Coupon( $coupon_id );
 
-			if ( ! $this->is_dahu_store_credit_coupon( $coupon ) ) {
+			if ( ! $this->is_ubac_credit_coupon( $coupon ) ) {
 				continue;
 			}
 
@@ -1770,15 +1770,15 @@ class Dahu_Store_Credit_Core {
 			 *
 			 * This is the decision the charge's own comment left pending, in
 			 * so many words: "the refund must clear
-			 * `_dahu_store_credit_processed` in the same save that sets its own
+			 * `_ubac_credit_processed` in the same save that sets its own
 			 * marker, and that is the pending decision about those two flags".
 			 * It is taken, and what makes it safe is the register on the
 			 * credit: an order back to completed is chargeable again because
 			 * the refund removed its entry from the register, and a second
 			 * charge against an entry still present is still refused.
 			 */
-			$order->update_meta_data( '_dahu_store_credit_restored', 'yes' );
-			$order->update_meta_data( '_dahu_store_credit_processed', '' );
+			$order->update_meta_data( '_ubac_credit_restored', 'yes' );
+			$order->update_meta_data( '_ubac_credit_processed', '' );
 			$order->save();
 		}
 	}
@@ -2185,7 +2185,7 @@ class Dahu_Store_Credit_Core {
 
 			$coupon = new WC_Coupon( $coupon_id );
 
-			if ( ! $this->is_dahu_store_credit_coupon( $coupon ) ) {
+			if ( ! $this->is_ubac_credit_coupon( $coupon ) ) {
 				continue;
 			}
 
@@ -2322,7 +2322,7 @@ class Dahu_Store_Credit_Core {
 			$order->add_order_note(
 				sprintf(
 					/* translators: 1: formatted amount, 2: coupon code, 3: percentage of the order refunded */
-					__( 'Dahu Store Credit: %1$s returned to %2$s, the credit\'s share of a partial refund covering %3$s of this order.', 'ubac-credit' ),
+					__( 'Ubac Store Credit: %1$s returned to %2$s, the credit\'s share of a partial refund covering %3$s of this order.', 'ubac-credit' ),
 					wc_price( $delta ),
 					$code,
 					$this->part_lisible( $part )
@@ -2517,7 +2517,7 @@ class Dahu_Store_Credit_Core {
 	 */
 	public function allow_repeat_use( $check, $user_id, $coupon ) {
 
-		if ( $coupon instanceof WC_Coupon && $this->is_dahu_store_credit_coupon( $coupon ) ) {
+		if ( $coupon instanceof WC_Coupon && $this->is_ubac_credit_coupon( $coupon ) ) {
 			return false;
 		}
 
@@ -2527,7 +2527,7 @@ class Dahu_Store_Credit_Core {
 	/**
 	 * Append an entry to the coupon's history meta.
 	 *
-	 * Kept on the coupon itself (_dahu_store_credit_history) rather than in a
+	 * Kept on the coupon itself (_ubac_credit_history) rather than in a
 	 * table of its own: the history is only ever read alongside the coupon, and
 	 * it survives with it.
 	 *
@@ -2538,7 +2538,7 @@ class Dahu_Store_Credit_Core {
 	 * @return void
 	 */
 	private function push_history( WC_Coupon $coupon, $order_id, $consumed, $new_balance ) {
-		$history   = $coupon->get_meta( '_dahu_store_credit_history' );
+		$history   = $coupon->get_meta( '_ubac_credit_history' );
 		$history   = is_array( $history ) ? $history : array();
 		$history[] = array(
 			'date'        => current_time( 'mysql' ),
@@ -2546,7 +2546,7 @@ class Dahu_Store_Credit_Core {
 			'consumed'    => $consumed,
 			'new_balance' => $new_balance,
 		);
-		$coupon->update_meta_data( '_dahu_store_credit_history', $history );
+		$coupon->update_meta_data( '_ubac_credit_history', $history );
 		$coupon->save();
 	}
 }

@@ -8,10 +8,10 @@
  * would silently turn every store credit back into an ordinary coupon that is
  * consumed whole — a change nobody asked for, affecting real customer balances.
  *
- * A merchant who wants them gone sets `dahu_store_credit_remove_data_on_uninstall`
+ * A merchant who wants them gone sets `ubac_credit_remove_data_on_uninstall`
  * to a truthy value before deleting the plugin.
  *
- * @package DahuStoreCredit
+ * @package UbacCredit
  */
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
@@ -21,29 +21,29 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
  *
  * @return void
  */
-function dahu_store_credit_uninstall_site() {
+function ubac_credit_uninstall_site() {
 
 	// The welcome screen's own three flags.
 	//
 	// They are interface state, not the shop's data, which is why they sit
 	// BEFORE any “remove data on uninstall” guard: whatever a shop chose to
-	// keep, a reinstall has to greet it again. `includes/dahu-welcome.php`
+	// keep, a reinstall has to greet it again. `includes/ubac-welcome.php`
 	// writes them with update_option(), so they outlive the plugin unless
 	// they are deleted here — and the welcome screen and the guided tour
 	// would then stay silent for good, with nothing on screen to explain why.
-	delete_option( 'dahu_welcome_seen_dahu-store-credit' );
-	delete_option( 'dahu_welcome_pending_dahu-store-credit' );
-	delete_option( 'dahu_welcome_tour_dahu-store-credit' );
+	delete_option( 'ubac_welcome_seen_ubac-credit' );
+	delete_option( 'ubac_welcome_pending_ubac-credit' );
+	delete_option( 'ubac_welcome_tour_ubac-credit' );
 
 	global $wpdb;
 
-	$wipe = (bool) get_option( 'dahu_store_credit_remove_data_on_uninstall', false );
+	$wipe = (bool) get_option( 'ubac_credit_remove_data_on_uninstall', false );
 
-	delete_option( 'dahu_store_credit_settings' );
-	delete_option( 'dahu_store_credit_remove_data_on_uninstall' );
+	delete_option( 'ubac_credit_settings' );
+	delete_option( 'ubac_credit_remove_data_on_uninstall' );
 
 	// Reserved-amount cache: always safe to drop.
-	foreach ( array( '_transient_dahu_store_credit_reserved_', '_transient_timeout_dahu_store_credit_reserved_' ) as $prefix ) {
+	foreach ( array( '_transient_ubac_credit_reserved_', '_transient_timeout_ubac_credit_reserved_' ) as $prefix ) {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- uninstall routine, no caching layer available.
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $wpdb->esc_like( $prefix ) . '%' ) );
 	}
@@ -56,19 +56,19 @@ function dahu_store_credit_uninstall_site() {
 	// before it, so post meta is the whole story for these two.
 	foreach (
 		array(
-			'_dahu_store_credit',
-			'_dahu_store_credit_history',
+			'_ubac_credit',
+			'_ubac_credit_history',
 			/* The orders whose refund has already been credited to this
 			   credit. A COUPON meta, so it goes here and not with the order
 			   markers further down. */
-			'_dahu_store_credit_refunded_orders',
+			'_ubac_credit_refunded_orders',
 			/* What each order took from this credit, added in 1.2.0 with the
 			   register that lives on the credit. A COUPON meta too, and for
 			   the same reason: it is written by the save that moves the
 			   money. */
-			'_dahu_store_credit_taken_by_orders',
-			'_dahu_store_credit_taken_by_order_keys',
-			'_dahu_store_credit_given_back',
+			'_ubac_credit_taken_by_orders',
+			'_ubac_credit_taken_by_order_keys',
+			'_ubac_credit_given_back',
 		) as $meta_key
 	) {
 		delete_post_meta_by_key( $meta_key );
@@ -91,15 +91,15 @@ function dahu_store_credit_uninstall_site() {
 	 * rather than assumed: a shop that never enabled HPOS does not have it.
 	 */
 	$order_markers = array(
-		'_dahu_store_credit_processed',
-		'_dahu_store_credit_restored',
-		'_dahu_store_credit_taken',
+		'_ubac_credit_processed',
+		'_ubac_credit_restored',
+		'_ubac_credit_taken',
 		/* Which credits on this order have their register on the credit
 		   itself, added in 1.2.0. An ORDER meta, so it belongs here and is
 		   deleted from both storages. */
-		'_dahu_store_credit_register_codes',
+		'_ubac_credit_register_codes',
 		/* The one-off messages already written on an order. */
-		'_dahu_store_credit_said',
+		'_ubac_credit_said',
 	);
 
 	foreach ( $order_markers as $meta_key ) {
@@ -120,18 +120,18 @@ function dahu_store_credit_uninstall_site() {
 }
 
 if ( is_multisite() ) {
-	$dahu_store_credit_site_ids = get_sites(
+	$ubac_credit_site_ids = get_sites(
 		array(
 			'fields' => 'ids',
 			'number' => 0,
 		)
 	);
 
-	foreach ( $dahu_store_credit_site_ids as $dahu_store_credit_site_id ) {
-		switch_to_blog( $dahu_store_credit_site_id );
-		dahu_store_credit_uninstall_site();
+	foreach ( $ubac_credit_site_ids as $ubac_credit_site_id ) {
+		switch_to_blog( $ubac_credit_site_id );
+		ubac_credit_uninstall_site();
 		restore_current_blog();
 	}
 } else {
-	dahu_store_credit_uninstall_site();
+	ubac_credit_uninstall_site();
 }

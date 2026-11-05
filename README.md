@@ -1,4 +1,4 @@
-# Dahu Store Credit
+# Ubac Store Credit
 
 Turns a WooCommerce fixed-cart coupon into real store credit: whatever is left
 over is carried forward instead of being lost.
@@ -64,7 +64,7 @@ another type is ignored, and the coupon screen says so.
 Deleting the plugin removes its settings. Coupon balances, flags and history are
 **kept**: removing them would quietly turn every store credit back into an
 ordinary coupon spent whole, changing real customer balances. Set
-`dahu_store_credit_remove_data_on_uninstall` to a truthy value before deleting
+`ubac_credit_remove_data_on_uninstall` to a truthy value before deleting
 to wipe everything.
 
 ## External services
