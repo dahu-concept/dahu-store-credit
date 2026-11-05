@@ -27,12 +27,15 @@ define( 'DAHU_STORE_CREDIT_FILE', __FILE__ );
 define( 'DAHU_STORE_CREDIT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'DAHU_STORE_CREDIT_URL', plugin_dir_url( __FILE__ ) );
 
-add_action(
-	'init',
-	static function () {
-		load_plugin_textdomain( 'dahu-store-credit', false, dirname( plugin_basename( DAHU_STORE_CREDIT_FILE ) ) . '/languages' );
-	}
-);
+/* -------------------------------------------------------------------------
+ * Translations
+ *
+ * There is deliberately no load_plugin_textdomain() call here. Since
+ * WordPress 4.6 the translations of a plugin hosted on WordPress.org are
+ * loaded on demand, and the directory's review asks that the call be removed
+ * rather than kept: this plugin requires 6.0, so there is no older WordPress
+ * to cover. Translations come from translate.wordpress.org.
+ * ---------------------------------------------------------------------- */
 
 add_action(
 	'before_woocommerce_init',
