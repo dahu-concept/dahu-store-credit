@@ -1,4 +1,4 @@
-=== Dahu Store Credit ===
+=== Ubac Store Credit ===
 Contributors: dahuconcept
 Tags: woocommerce, store credit, coupons, refunds, vouchers
 Requires at least: 6.0

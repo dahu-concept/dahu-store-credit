@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: dahu-store-credit\n"
+"Project-Id-Version: ubac-credit\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -9,276 +9,276 @@ msgstr ""
 "PO-Revision-Date: 2026-10-31 11:09+0000\n"
 "X-Generator: dahu i18n-build\n"
 
-#: dahu-store-credit.php:164
+#: ubac-credit.php:164
 msgid "A balance per customer"
 msgstr "Un solde par client"
 
-#: includes/class-dahu-store-credit-admin.php:126
+#: includes/class-ubac-credit-admin.php:126
 msgid "Active store credits"
 msgstr "Avoirs actifs"
 
-#: dahu-store-credit.php:165
+#: ubac-credit.php:165
 msgid "Added by hand or by a refund."
 msgstr "Ajouté à la main ou par un remboursement."
 
-#: dahu-store-credit.php:172
+#: ubac-credit.php:172
 msgid "Always traceable"
 msgstr "Toujours traçable"
 
-#: includes/class-dahu-store-credit-admin.php:277
+#: includes/class-ubac-credit-admin.php:277
 msgid "Amount used"
 msgstr "Montant utilisé"
 
-#: dahu-store-credit.php:169
+#: ubac-credit.php:169
 msgid "Applied like a payment, not a coupon."
 msgstr "Appliqué comme un paiement, pas comme un code promo."
 
-#: includes/class-dahu-store-credit-admin.php:108
+#: includes/class-ubac-credit-admin.php:108
 msgid "Automatically carry the remaining balance forward after payment"
 msgstr "Reporter automatiquement le solde restant après le paiement"
 
-#: dahu-store-credit.php:93
+#: ubac-credit.php:93
 msgid "By Hugo Vial-Jaime — Dahu-Concept"
 msgstr "Par Hugo Vial-Jaime — Dahu-Concept"
 
-#: includes/class-dahu-store-credit-admin.php:187
+#: includes/class-ubac-credit-admin.php:187
 msgid "Code"
 msgstr "Code"
 
-#: dahu-store-credit.php:189
+#: ubac-credit.php:189
 msgid "Coupons become a balance"
 msgstr "Les bons deviennent un solde"
 
-#: includes/class-dahu-store-credit-admin.php:178
+#: includes/class-ubac-credit-admin.php:178
 msgid "Create a coupon"
 msgstr "Créer un code promo"
 
-#: dahu-store-credit.php:136 includes/class-dahu-store-credit-admin.php:95
+#: ubac-credit.php:136 includes/class-ubac-credit-admin.php:95
 msgid "Credit a customer can spend at the checkout, and where it came from."
 msgstr "Un avoir que le client dépense au paiement, et d’où il vient."
 
-#: includes/class-dahu-store-credit-admin.php:188
+#: includes/class-ubac-credit-admin.php:188
 msgid "Current balance"
 msgstr "Solde actuel"
 
-#: includes/class-dahu-store-credit-admin.php:31 includes/class-dahu-store-credit-admin.php:32
+#: includes/class-ubac-credit-admin.php:31 includes/class-ubac-credit-admin.php:32
 msgid "Dahu Store Credit"
 msgstr "Dahu Store Credit"
 
-#: includes/class-dahu-store-credit-admin.php:249
+#: includes/class-ubac-credit-admin.php:249
 msgid "Dahu Store Credit history"
 msgstr "Historique des avoirs"
 
-#: dahu-store-credit.php:53
+#: ubac-credit.php:53
 msgid "Dahu Store Credit requires WooCommerce."
 msgstr "Dahu Store Credit nécessite WooCommerce."
 
 #. translators: %s: coupon code */
-#: includes/class-dahu-store-credit-core.php:641
+#: includes/class-ubac-credit-core.php:641
 msgid "Dahu Store Credit: could not restore “%s”, coupon not found."
 msgstr "Dahu Store Credit : impossible de recréditer « %s », code promo introuvable."
 
 #. translators: %s: coupon code */
-#: includes/class-dahu-store-credit-core.php:408
+#: includes/class-ubac-credit-core.php:408
 msgid "Dahu Store Credit: coupon “%s” no longer exists; nothing was processed."
 msgstr "Dahu Store Credit : le code promo « %s » n’existe plus, rien n’a été traité."
 
-#: includes/class-dahu-store-credit-admin.php:275
+#: includes/class-ubac-credit-admin.php:275
 msgid "Date"
 msgstr "Date"
 
-#: dahu-store-credit.php:200
+#: ubac-credit.php:200
 msgid "Days added to the expiry date on each partial use."
 msgstr "Jours ajoutés à la date d'expiration à chaque utilisation partielle."
 
-#: includes/class-dahu-store-credit-admin.php:116
+#: includes/class-ubac-credit-admin.php:116
 msgid "Days added to the expiry date on each partial use. 0 leaves the expiry date alone."
 msgstr "Jours ajoutés à la date d’expiration à chaque utilisation partielle. 0 laisse la date inchangée."
 
-#: dahu-store-credit.php:157
+#: ubac-credit.php:157
 msgid "Done"
 msgstr "Terminé"
 
-#: includes/class-dahu-store-credit-admin.php:190
+#: includes/class-ubac-credit-admin.php:190
 msgid "Email restriction"
 msgstr "Restriction par e-mail"
 
-#: includes/class-dahu-store-credit-admin.php:104
+#: includes/class-ubac-credit-admin.php:104
 msgid "Enable Dahu Store Credit"
 msgstr "Activer Dahu Store Credit"
 
-#: dahu-store-credit.php:173
+#: ubac-credit.php:173
 msgid "Every movement says who made it and why."
 msgstr "Chaque mouvement dit qui l’a fait et pourquoi."
 
-#: includes/class-dahu-store-credit-admin.php:189
+#: includes/class-ubac-credit-admin.php:189
 msgid "Expiry date"
 msgstr "Date d’expiration"
 
-#: dahu-store-credit.php:199
+#: ubac-credit.php:199
 msgid "Extend the validity"
 msgstr "Prolongez la validité"
 
-#: includes/class-dahu-store-credit-admin.php:278
+#: includes/class-ubac-credit-admin.php:278
 msgid "New balance"
 msgstr "Nouveau solde"
 
-#: dahu-store-credit.php:156
+#: ubac-credit.php:156
 msgid "Next"
 msgstr "Suivant"
 
-#: includes/class-dahu-store-credit-admin.php:267
+#: includes/class-ubac-credit-admin.php:267
 msgid "No history yet."
 msgstr "Aucun historique pour l’instant."
 
-#: includes/class-dahu-store-credit-admin.php:176
+#: includes/class-ubac-credit-admin.php:176
 msgid "No store credit recorded yet. A fixed-cart coupon ticked as store credit appears here."
 msgstr "Aucun avoir enregistré pour l’instant. Un code promo à montant fixe coché comme avoir apparaît ici."
 
-#: includes/class-dahu-store-credit-admin.php:276
+#: includes/class-ubac-credit-admin.php:276
 msgid "Order"
 msgstr "Commande"
 
-#: dahu-store-credit.php:98
+#: ubac-credit.php:98
 msgid "Plugin website"
 msgstr "Site de l’extension"
 
-#: dahu-store-credit.php:72
+#: ubac-credit.php:72
 msgid "Settings"
 msgstr "Réglages"
 
-#: dahu-store-credit.php:158
+#: ubac-credit.php:158
 msgid "Skip"
 msgstr "Passer"
 
-#: dahu-store-credit.php:168
+#: ubac-credit.php:168
 msgid "Spent at the checkout"
 msgstr "Dépensé au paiement"
 
-#: dahu-store-credit.php:135 includes/class-dahu-store-credit-admin.php:94
+#: ubac-credit.php:135 includes/class-ubac-credit-admin.php:94
 msgid "Store credit"
 msgstr "Avoir"
 
 #. translators: 1: coupon code, 2: consumed amount, 3: remaining balance */
-#: includes/class-dahu-store-credit-core.php:564
+#: includes/class-ubac-credit-core.php:564
 msgid "Store credit %1$s: %2$s used, %3$s carried forward."
 msgstr "Avoir %1$s : %2$s utilisés, %3$s reportés."
 
 #. translators: 1: coupon code, 2: restored amount */
-#: includes/class-dahu-store-credit-core.php:854
+#: includes/class-ubac-credit-core.php:854
 msgid "Store credit %1$s: order cancelled or refunded, %2$s returned to the coupon."
 msgstr "Avoir %1$s : commande annulée ou remboursée, %2$s rendus au code promo."
 
 #. translators: %s: coupon code */
-#: includes/class-dahu-store-credit-core.php:574
+#: includes/class-ubac-credit-core.php:574
 msgid "Store credit %s fully used."
 msgstr "Avoir %s entièrement utilisé."
 
 #. translators: %s: coupon code */
-#: includes/class-dahu-store-credit-core.php:387
+#: includes/class-ubac-credit-core.php:387
 msgid "Store credit %s: this order carries a charge record that cannot be read, so the credit was left alone. Check the credit before treating this order as paid by it."
 msgstr "Avoir %s : cette commande porte une trace de prélèvement illisible, donc l’avoir n’a pas été touché. Vérifiez l’avoir avant de considérer cette commande comme payée par lui."
 
 #. translators: %s: coupon code */
-#: includes/class-dahu-store-credit-core.php:397
+#: includes/class-ubac-credit-core.php:397
 msgid "Store credit %s: this order is already recorded as charged on that credit, so it was not charged again."
 msgstr "Avoir %s : cette commande est déjà enregistrée comme prélevée sur cet avoir, donc il n’a pas été prélevé une seconde fois."
 
 #. translators: %s: coupon code */
-#: includes/class-dahu-store-credit-core.php:692
+#: includes/class-ubac-credit-core.php:692
 msgid "Store credit %s: this order is already recorded as refunded on that credit, so it was not returned twice."
 msgstr "Avoir %s : cette commande est déjà enregistrée comme remboursée sur cet avoir, donc il n’a pas été rendu deux fois."
 
-#: includes/class-dahu-store-credit-core.php:82
+#: includes/class-ubac-credit-core.php:82
 msgid "Store credit (balance carries forward)"
 msgstr "Avoir (le solde est reporté)"
 
-#: dahu-store-credit.php:194
+#: ubac-credit.php:194
 msgid "Switch it on or off"
 msgstr "Activez ou désactivez"
 
-#: includes/class-dahu-store-credit-core.php:260
+#: includes/class-ubac-credit-core.php:260
 msgid "The balance of this store credit is currently too low, or already reserved by another order awaiting payment."
 msgstr "Le solde de cet avoir est trop faible, ou déjà réservé par une autre commande en attente de paiement."
 
-#: includes/class-dahu-store-credit-core.php:90
+#: includes/class-ubac-credit-core.php:90
 msgid "This coupon is marked as store credit but is not of the “Fixed cart discount” type. Dahu Store Credit will ignore it."
 msgstr "Ce code promo est marqué comme avoir mais n’est pas de type « Remise fixe sur le panier ». Dahu Store Credit l’ignorera."
 
-#: includes/class-dahu-store-credit-admin.php:262
+#: includes/class-ubac-credit-admin.php:262
 msgid "This coupon is not marked as store credit."
 msgstr "Ce code promo n’est pas marqué comme avoir."
 
-#: includes/class-dahu-store-credit-admin.php:203
+#: includes/class-ubac-credit-admin.php:203
 msgid "Unlimited"
 msgstr "Illimitée"
 
-#: includes/class-dahu-store-credit-admin.php:113
+#: includes/class-ubac-credit-admin.php:113
 msgid "Validity extension"
 msgstr "Prolongation de validité"
 
 #. translators: %s: plugin version number. */
-#: dahu-store-credit.php:87
+#: ubac-credit.php:87
 msgid "Version %s"
 msgstr "Version %s"
 
-#: dahu-store-credit.php:190
+#: ubac-credit.php:190
 msgid "What is left on a coupon stays available for the next order."
 msgstr "Ce qui reste sur un bon reste disponible pour la commande suivante."
 
-#: dahu-store-credit.php:195
+#: ubac-credit.php:195
 msgid "When on, the remaining balance is carried forward after payment."
 msgstr "Activé, le solde restant est reporté après le paiement."
 
-#: includes/class-dahu-store-credit-core.php:83
+#: includes/class-ubac-credit-core.php:83
 msgid "When ticked, whatever is left of this fixed-cart coupon is carried forward after payment instead of being lost."
 msgstr "Si la case est cochée, ce qui reste de ce code promo à montant fixe est reporté après le paiement au lieu d’être perdu."
 
-#: dahu-store-credit.php:160
+#: ubac-credit.php:160
 msgid "You are not allowed to view this page."
 msgstr "Vous n’avez pas l’autorisation de voir cette page."
 
-#: dahu-store-credit.php:159
+#: ubac-credit.php:159
 msgid "of"
 msgstr "sur"
 
-#: includes/class-dahu-store-credit-core.php:1077
+#: includes/class-ubac-credit-core.php:1077
 msgid "Store credit %s: the credit charged on this order has been deleted and recreated since, so what was taken has been returned to the new one. Check its balance — it may now hold more than it ever lent."
 msgstr "Avoir %s : l’avoir prélevé sur cette commande a été supprimé puis recréé depuis, donc ce qui avait été pris a été rendu au nouveau. Vérifiez son solde : il peut désormais porter plus qu’il n’a jamais prêté."
 
-#: includes/class-dahu-store-credit-core.php:1166
+#: includes/class-ubac-credit-core.php:1166
 msgid "Store credit %s: the amount was returned, but that credit has expired and cannot be spent as it stands. Give it a new expiry date for the customer to use it."
 msgstr "Avoir %s : le montant a été rendu, mais cet avoir est périmé et ne peut pas être dépensé en l’état. Donnez-lui une nouvelle date d’expiration pour que le client puisse l’utiliser."
 
-#: includes/class-dahu-store-credit-core.php:582
+#: includes/class-ubac-credit-core.php:582
 msgid "Store credit %s: this order was charged on a credit that has since been deleted and recreated under the same code, so the credit now carrying that code was left alone. It is not the one that paid for this order."
 msgstr "Avoir %s : cette commande a été prélevée sur un avoir supprimé puis recréé sous le même code depuis ; l’avoir qui porte ce code aujourd’hui n’a donc pas été touché. Ce n’est pas celui qui a payé cette commande."
 
-#: includes/class-dahu-store-credit-core.php:591
+#: includes/class-ubac-credit-core.php:591
 msgid "Store credit %s: a charge is recorded against this order id, but it could not be matched to this order, so the credit was left alone. Check whether this order was really paid by that credit."
 msgstr "Avoir %s : un prélèvement est enregistré pour cet identifiant de commande, mais il n’a pas pu être rattaché à cette commande ; l’avoir n’a donc pas été touché. Vérifiez si cette commande a réellement été payée par cet avoir."
 
-#: includes/class-dahu-store-credit-core.php:591
+#: includes/class-ubac-credit-core.php:591
 msgid "Store credit %s: a charge is recorded against this order id but cannot be tied to this order, so nothing was returned automatically — returning it could hand over an amount another order took. Check whether this order was paid by that credit and refund it by hand if so."
 msgstr "Avoir %s : un prélèvement est enregistré pour cet identifiant de commande mais ne peut pas être rattaché à cette commande ; rien n’a donc été rendu automatiquement — le rendre risquerait de verser un montant pris par une autre commande. Vérifiez si cette commande a été payée par cet avoir et remboursez-la à la main le cas échéant."
 
-#: includes/class-dahu-store-credit-core.php:1307
+#: includes/class-ubac-credit-core.php:1307
 msgid "Store credit %s: this order claims a charge on that credit but the amount recorded cannot be read, and the order no longer carries the coupon line to fall back on, so nothing was returned. Check the credit and refund it by hand if something is owed."
 msgstr "Avoir %s : cette commande revendique un prélèvement sur cet avoir mais le montant enregistré est illisible, et la commande ne porte plus la ligne de coupon sur laquelle se rabattre ; rien n’a donc été rendu. Vérifiez l’avoir et remboursez à la main si quelque chose est dû."
 
-#: includes/class-dahu-store-credit-core.php:725
+#: includes/class-ubac-credit-core.php:725
 msgid "Store credit %1$s: this order id already carried a charge of %2$s made by a different order, which no longer exists. That record has been replaced by this one."
 msgstr "Avoir %1$s : cet identifiant de commande portait déjà un prélèvement de %2$s effectué par une autre commande, qui n’existe plus. Cet enregistrement a été remplacé par celui-ci."
 
-#: includes/class-dahu-store-credit-core.php:2162
+#: includes/class-ubac-credit-core.php:2162
 msgid "Dahu Store Credit: %1$s returned to %2$s, the credit's share of a partial refund covering %3$s of this order."
 msgstr "Dahu Avoir : %1$s rendus à %2$s, la part de l’avoir dans un remboursement partiel portant sur %3$s de cette commande."
 
-#: includes/class-dahu-store-credit-core.php:1412
+#: includes/class-ubac-credit-core.php:1412
 msgid "Store credit %s: the record of what had already been returned on this order could not be read, so it was treated as nothing returned yet. Check that credit's balance and its history."
 msgstr "Avoir %s : l’enregistrement de ce qui avait déjà été rendu sur cette commande est illisible ; il a donc été traité comme « rien rendu pour l’instant ». Vérifiez le solde de cet avoir et son historique."
 
-#: includes/class-dahu-store-credit-core.php:1703
+#: includes/class-ubac-credit-core.php:1703
 msgid "Store credit %s: this order was marked refunded, but nothing that was actually refunded covers any goods — only shipping, fees or an amount with no line attached. The full amount has been returned to the credit anyway. Check that the goods really came back."
 msgstr "Avoir %s : cette commande a été marquée remboursée, mais rien de ce qui a réellement été remboursé ne couvre de marchandise — seulement le port, des frais, ou un montant sans ligne rattachée. Le montant complet a tout de même été rendu à l’avoir. Vérifiez que la marchandise est bien revenue."
 

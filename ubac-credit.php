@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name:       Dahu Store Credit
+ * Plugin Name:       Ubac Store Credit
  * Description:       Carries the unused balance of a WooCommerce fixed-cart coupon forward instead of consuming it whole, turning any coupon into real store credit.
  * Version:           1.2.0
  * Author:            Hugo Vial-Jaime
  * Author URI:        https://dahu-concept.fr
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
- * Text Domain:       dahu-store-credit
+ * Text Domain:       ubac-credit
  * Domain Path:       /languages
  * Requires at least: 6.0
  * Requires Plugins: woocommerce
@@ -53,7 +53,7 @@ function dahu_store_credit_init() {
 		add_action(
 			'admin_notices',
 			function () {
-				echo '<div class="notice notice-error"><p>' . esc_html__( 'Dahu Store Credit requires WooCommerce.', 'dahu-store-credit' ) . '</p></div>';
+				echo '<div class="notice notice-error"><p>' . esc_html__( 'Dahu Store Credit requires WooCommerce.', 'ubac-credit' ) . '</p></div>';
 			}
 		);
 		return;
@@ -72,7 +72,7 @@ add_filter(
 		$settings = sprintf(
 			'<a href="%s">%s</a>',
 			esc_url( admin_url( 'admin.php?page=dahu-store-credit' ) ),
-			esc_html__( 'Settings', 'dahu-store-credit' )
+			esc_html__( 'Settings', 'ubac-credit' )
 		);
 		array_unshift( $links, $settings );
 		return $links;
@@ -87,18 +87,18 @@ add_filter(
 			$links  = array(
 				sprintf(
 					/* translators: %s: plugin version number. */
-					esc_html__( 'Version %s', 'dahu-store-credit' ),
+					esc_html__( 'Version %s', 'ubac-credit' ),
 					esc_html( $header['Version'] )
 				),
 				sprintf(
 					'<a href="%s" target="_blank" rel="noopener">%s</a>',
 					esc_url( 'https://dahu-concept.fr' ),
-					esc_html__( 'By Hugo Vial-Jaime — Dahu-Concept', 'dahu-store-credit' )
+					esc_html__( 'By Hugo Vial-Jaime — Dahu-Concept', 'ubac-credit' )
 				),
 				sprintf(
 					'<a href="%s" target="_blank" rel="noopener">%s</a>',
 					esc_url( 'https://dahu-concept.fr' ),
-					esc_html__( 'Plugin website', 'dahu-store-credit' )
+					esc_html__( 'Plugin website', 'ubac-credit' )
 				),
 			);
 		}
@@ -135,8 +135,8 @@ add_action(
 		Dahu_Welcome::register(
 			array(
 				'slug'       => 'dahu-store-credit',
-				'name'       => __( 'Store credit', 'dahu-store-credit' ),
-				'tagline'    => __( 'Credit a customer can spend at the checkout, and where it came from.', 'dahu-store-credit' ),
+				'name'       => __( 'Store credit', 'ubac-credit' ),
+				'tagline'    => __( 'Credit a customer can spend at the checkout, and where it came from.', 'ubac-credit' ),
 				'file'       => DAHU_STORE_CREDIT_FILE,
 				'version'    => DAHU_STORE_CREDIT_VERSION,
 				'textdomain' => 'dahu-store-credit',
@@ -156,24 +156,24 @@ add_action(
 				 * no text domain of its own.
 				 */
 				'strings'    => array(
-					'next'   => __( 'Next', 'dahu-store-credit' ),
-					'done'   => __( 'Done', 'dahu-store-credit' ),
-					'skip'   => __( 'Skip', 'dahu-store-credit' ),
-					'of'     => __( 'of', 'dahu-store-credit' ),
-					'denied' => __( 'You are not allowed to view this page.', 'dahu-store-credit' ),
+					'next'   => __( 'Next', 'ubac-credit' ),
+					'done'   => __( 'Done', 'ubac-credit' ),
+					'skip'   => __( 'Skip', 'ubac-credit' ),
+					'of'     => __( 'of', 'ubac-credit' ),
+					'denied' => __( 'You are not allowed to view this page.', 'ubac-credit' ),
 				),
 				'points'     => array(
 				array(
-					'title' => __( 'A balance per customer', 'dahu-store-credit' ),
-					'text'  => __( 'Added by hand or by a refund.', 'dahu-store-credit' ),
+					'title' => __( 'A balance per customer', 'ubac-credit' ),
+					'text'  => __( 'Added by hand or by a refund.', 'ubac-credit' ),
 				),
 				array(
-					'title' => __( 'Spent at the checkout', 'dahu-store-credit' ),
-					'text'  => __( 'Applied like a payment, not a coupon.', 'dahu-store-credit' ),
+					'title' => __( 'Spent at the checkout', 'ubac-credit' ),
+					'text'  => __( 'Applied like a payment, not a coupon.', 'ubac-credit' ),
 				),
 				array(
-					'title' => __( 'Always traceable', 'dahu-store-credit' ),
-					'text'  => __( 'Every movement says who made it and why.', 'dahu-store-credit' ),
+					'title' => __( 'Always traceable', 'ubac-credit' ),
+					'text'  => __( 'Every movement says who made it and why.', 'ubac-credit' ),
 				),
 				),
 
@@ -189,18 +189,18 @@ add_action(
 				'tour'        => array(
 					array(
 						'selector' => '#dahu-store-credit-list',
-						'title'    => __( 'Coupons become a balance', 'dahu-store-credit' ),
-						'text'     => __( 'What is left on a coupon stays available for the next order.', 'dahu-store-credit' ),
+						'title'    => __( 'Coupons become a balance', 'ubac-credit' ),
+						'text'     => __( 'What is left on a coupon stays available for the next order.', 'ubac-credit' ),
 					),
 					array(
 						'selector' => 'input[name="dahu_store_credit_settings[enabled]"]',
-						'title'    => __( 'Switch it on or off', 'dahu-store-credit' ),
-						'text'     => __( 'When on, the remaining balance is carried forward after payment.', 'dahu-store-credit' ),
+						'title'    => __( 'Switch it on or off', 'ubac-credit' ),
+						'text'     => __( 'When on, the remaining balance is carried forward after payment.', 'ubac-credit' ),
 					),
 					array(
 						'selector' => 'input[name="dahu_store_credit_settings[extension_days]"]',
-						'title'    => __( 'Extend the validity', 'dahu-store-credit' ),
-						'text'     => __( 'Days added to the expiry date on each partial use.', 'dahu-store-credit' ),
+						'title'    => __( 'Extend the validity', 'ubac-credit' ),
+						'text'     => __( 'Days added to the expiry date on each partial use.', 'ubac-credit' ),
 					),
 				),
 			)
