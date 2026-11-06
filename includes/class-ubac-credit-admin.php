@@ -29,7 +29,7 @@ class Ubac_Credit_Admin {
 		add_submenu_page(
 			'woocommerce',
 			__( 'Ubac Store Credit', 'ubac-credit' ),
-			__( 'Ubac Store Credit', 'ubac-credit' ),
+			__( 'Store credit', 'ubac-credit' ),
 			'manage_woocommerce',
 			'ubac-credit',
 			array( $this, 'render_settings_page' )
