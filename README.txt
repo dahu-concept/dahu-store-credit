@@ -4,7 +4,7 @@ Tags: woocommerce, store credit, coupons, refunds, vouchers
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -101,6 +101,10 @@ before deleting if you really want them gone.
 
 == Changelog ==
 
+= 1.2.1 =
+* Changed: the WooCommerce submenu now reads "Store credit" rather than carrying the product name, which is what every other extension of the family does and what this extension's own page heading already said.
+* Changed: WordPress 6.2 is now the floor, as it is for the rest of the family.
+
 = 1.2.0 =
 * Fixed: an interruption between the record of a charge and the charge itself could create money. The record was written on the order and the money taken from the credit immediately after, so a request that died in between left a record saying "took 40" in front of a credit that still held its 100: the next pass skipped the credit on the strength of that record, the goods went out against it, and cancelling the order then returned 40 that had never been taken — 140 on a credit of 100. What each order took is now recorded on the credit itself, written by the very save that debits it, so the two can no longer come apart. Measured across every cut rank of both datastores and both operations, on a fresh credit and on one that had already been through a full cycle: 48 ranks out of 48, a gap of 0.00.
 * Fixed: an order that had been refunded once and was then completed again could not be charged, and a cut at the wrong moment made that permanent — the credit debited, the money taken, and no pass able to give it back. The two order-wide markers are no longer gates, and setting one clears the other; what prevents a double charge or a double refund is now a record carried by the credit, one credit at a time.
@@ -172,6 +176,9 @@ before deleting if you really want them gone.
 * First public release.
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+The WooCommerce submenu is renamed to match the page it opens. WordPress 6.2 is now the floor.
 
 = 1.2.0 =
 Corrects defects that moved real money, each one measured: a refund returning
