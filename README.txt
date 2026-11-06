@@ -174,12 +174,10 @@ before deleting if you really want them gone.
 == Upgrade Notice ==
 
 = 1.2.0 =
-Corrects defects that moved real money, each one measured: a refund that could
-return more than a credit ever lent, a charge that could be taken twice after
-an interrupted request, a credit refused to the customer who owned it, and a
-remaining balance whose expiry date was cut short. Partial refunds now return
-the credit's share. Worth updating before the next refund.
-
+Corrects defects that moved real money, each one measured: a refund returning
+more than the credit lent, a charge taken twice after a failed payment, and a
+balance that could go negative. Nothing to do on update. See the changelog for
+what changed and how each was measured.
 = 1.0.5 =
 Corrects a one-cent balance being lost when a store credit is almost fully
 spent.
