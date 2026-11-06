@@ -70,12 +70,31 @@ class Ubac_Credit_Admin {
 
 	public function register_settings() {
 		register_setting( 'ubac_credit_settings_group', 'ubac_credit_settings', array( $this, 'sanitize_settings' ) );
+
+		/*
+		 * The screen is reachable with manage_woocommerce, but options.php asks
+		 * for manage_options by default, so a shop_manager could tick the box,
+		 * press save and be refused -- having been shown the choice. The
+		 * capability that saves is now the capability that opens.
+		 */
+		add_filter(
+			'option_page_capability_ubac_credit_settings_group',
+			static function () {
+				return 'manage_woocommerce';
+			}
+		);
 	}
 
 	public function sanitize_settings( $input ) {
 		$output                   = array();
 		$output['enabled']        = ( isset( $input['enabled'] ) && 'yes' === $input['enabled'] ) ? 'yes' : 'no';
 		$output['extension_days'] = isset( $input['extension_days'] ) ? max( 0, (int) $input['extension_days'] ) : 0;
+
+		// The uninstall choice. Stored as 'yes'/'no' like `enabled`, and read
+		// by uninstall.php out of this same array, so there is one place to
+		// set it and one place to read it.
+		$output['delete_data_on_uninstall'] = ( isset( $input['delete_data_on_uninstall'] ) && 'yes' === $input['delete_data_on_uninstall'] ) ? 'yes' : 'no';
+
 		return $output;
 	}
 
@@ -87,6 +106,7 @@ class Ubac_Credit_Admin {
 		$settings       = get_option( 'ubac_credit_settings', array() );
 		$enabled        = isset( $settings['enabled'] ) ? $settings['enabled'] : 'yes';
 		$extension_days = isset( $settings['extension_days'] ) ? (int) $settings['extension_days'] : 0;
+		$delete_on_uninstall = isset( $settings['delete_data_on_uninstall'] ) ? $settings['delete_data_on_uninstall'] : 'no';
 
 		?>
 		<div class="wrap ubac-ui">
@@ -114,6 +134,16 @@ class Ubac_Credit_Admin {
 						<td>
 							<input type="number" min="0" step="1" name="ubac_credit_settings[extension_days]" value="<?php echo esc_attr( $extension_days ); ?>" class="small-text" />
 							<p class="description"><?php esc_html_e( 'Days added to the expiry date on each partial use. 0 leaves the expiry date alone.', 'ubac-credit' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Uninstalling', 'ubac-credit' ); ?></th>
+						<td>
+							<label>
+								<input type="checkbox" name="ubac_credit_settings[delete_data_on_uninstall]" value="yes" <?php checked( $delete_on_uninstall, 'yes' ); ?> />
+								<?php esc_html_e( "Delete this plugin's data when the plugin is deleted", 'ubac-credit' ); ?>
+							</label>
+							<p class="description"><?php esc_html_e( 'Off, and worth leaving off. What goes is every credit balance and the history of where each one came from — money owed to customers. Deleting the plugin is usually a step in reinstalling it.', 'ubac-credit' ); ?></p>
 						</td>
 					</tr>
 				</table>

@@ -8,8 +8,8 @@
  * would silently turn every store credit back into an ordinary coupon that is
  * consumed whole — a change nobody asked for, affecting real customer balances.
  *
- * A merchant who wants them gone sets `ubac_credit_remove_data_on_uninstall`
- * to a truthy value before deleting the plugin.
+ * A merchant who wants them gone ticks "Delete this plugin's data when the
+ * plugin is deleted" on the Store credit screen before deleting the plugin.
  *
  * @package UbacCredit
  */
@@ -37,9 +37,28 @@ function ubac_credit_uninstall_site() {
 
 	global $wpdb;
 
-	$wipe = (bool) get_option( 'ubac_credit_remove_data_on_uninstall', false );
+	/*
+	 * Read BEFORE the settings array is deleted just below, out of that same
+	 * array, where the box that sets it lives.
+	 *
+	 * Until 06/11/2026 this was a standalone option named
+	 * `ubac_credit_remove_data_on_uninstall` that NOTHING anywhere wrote: the
+	 * branch it guards could never run, so a shop that asked for its credits to
+	 * go kept them for ever with no way to say otherwise.
+	 *
+	 * Compared against 'yes', never cast to bool: the value is the STRING 'no'
+	 * when the box is unticked, and 'no' is truthy in PHP.
+	 */
+	$ubac_credit_settings = get_option( 'ubac_credit_settings', array() );
+	$wipe                 = is_array( $ubac_credit_settings )
+		&& isset( $ubac_credit_settings['delete_data_on_uninstall'] )
+		&& 'yes' === $ubac_credit_settings['delete_data_on_uninstall'];
 
 	delete_option( 'ubac_credit_settings' );
+
+	// The old name goes too. Nothing in the code ever wrote it, but a merchant
+	// who followed the previous header and set it by hand would otherwise keep
+	// an orphan row that no longer does anything.
 	delete_option( 'ubac_credit_remove_data_on_uninstall' );
 
 	// Reserved-amount cache: always safe to drop.
