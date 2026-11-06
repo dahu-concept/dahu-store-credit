@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Ubac Store Credit
  * Description:       Carries the unused balance of a WooCommerce fixed-cart coupon forward instead of consuming it whole, turning any coupon into real store credit.
- * Version:           1.2.1
+ * Version:           1.2.2
  * Author:            Hugo Vial-Jaime
  * Author URI:        https://dahu-concept.fr
  * License:           MIT
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'UBAC_CREDIT_VERSION', '1.2.1' );
+define( 'UBAC_CREDIT_VERSION', '1.2.2' );
 define( 'UBAC_CREDIT_FILE', __FILE__ );
 define( 'UBAC_CREDIT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'UBAC_CREDIT_URL', plugin_dir_url( __FILE__ ) );

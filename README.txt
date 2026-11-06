@@ -4,7 +4,7 @@ Tags: woocommerce, store credit, coupons, refunds, vouchers
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -101,6 +101,10 @@ before deleting if you really want them gone.
 
 == Changelog ==
 
+= 1.2.2 =
+* Changed: the compiled French catalogue now travels in the package. It was left out on the grounds that the directory serves language packs, which is true only for a copy installed from the directory and only once translations have been imported: a copy installed by hand showed English with a catalogue that was fully translated.
+* Changed: the French readme moves under docs/, so the directory's checker no longer reports an unexpected markdown file at the plugin root.
+
 = 1.2.1 =
 * Changed: the WooCommerce submenu now reads "Store credit" rather than carrying the product name, which is what every other extension of the family does and what this extension's own page heading already said.
 * Changed: WordPress 6.2 is now the floor, as it is for the rest of the family.
@@ -176,6 +180,9 @@ before deleting if you really want them gone.
 * First public release.
 
 == Upgrade Notice ==
+
+= 1.2.2 =
+French now works on a copy installed by hand: the compiled catalogue travels in the package. The French readme moves under docs/.
 
 = 1.2.1 =
 The WooCommerce submenu is renamed to match the page it opens. WordPress 6.2 is now the floor.
