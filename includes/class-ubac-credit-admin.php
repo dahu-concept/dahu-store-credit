@@ -22,6 +22,26 @@ class Ubac_Credit_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 
+		/*
+		 * The screen is reachable with manage_woocommerce, but options.php asks
+		 * for manage_options by default, so a shop_manager could tick a box,
+		 * press save and be refused -- having been shown the choice. The
+		 * capability that saves is the capability that opens.
+		 *
+		 * Registered here rather than inside register_settings(), where it sat
+		 * until 08/11/2026. It worked, because options.php loads admin.php and
+		 * so fires admin_init before reading the filter -- but it depended on
+		 * that ordering, and would have failed silently had the hook moved to a
+		 * later priority or behind a screen condition. ubac-composite-products
+		 * and ubac-pricing both register theirs at this level.
+		 */
+		add_filter(
+			'option_page_capability_ubac_credit_settings_group',
+			static function () {
+				return 'manage_woocommerce';
+			}
+		);
+
 		add_action( 'add_meta_boxes', array( $this, 'add_history_metabox' ) );
 	}
 
@@ -70,19 +90,6 @@ class Ubac_Credit_Admin {
 
 	public function register_settings() {
 		register_setting( 'ubac_credit_settings_group', 'ubac_credit_settings', array( $this, 'sanitize_settings' ) );
-
-		/*
-		 * The screen is reachable with manage_woocommerce, but options.php asks
-		 * for manage_options by default, so a shop_manager could tick the box,
-		 * press save and be refused -- having been shown the choice. The
-		 * capability that saves is now the capability that opens.
-		 */
-		add_filter(
-			'option_page_capability_ubac_credit_settings_group',
-			static function () {
-				return 'manage_woocommerce';
-			}
-		);
 	}
 
 	public function sanitize_settings( $input ) {
