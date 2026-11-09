@@ -1,139 +1,174 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ubac-credit\n"
+"Project-Id-Version: dahuconcept-store-credit\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"PO-Revision-Date: 2026-11-06 10:18+0000\n"
+"PO-Revision-Date: 2026-11-09 07:30+0000\n"
 "X-Generator: ubac i18n-build\n"
 
-#: ubac-credit.php:167
+#: dahuconcept-store-credit.php:167
 msgid "A balance per customer"
 msgstr "Un solde par client"
 
-#: includes/class-ubac-credit-admin.php:126
+#: includes/class-ubac-credit-admin.php:163
 msgid "Active store credits"
 msgstr "Avoirs actifs"
 
-#: ubac-credit.php:168
+#: dahuconcept-store-credit.php:168
 msgid "Added by hand or by a refund."
 msgstr "Ajouté à la main ou par un remboursement."
 
-#: ubac-credit.php:175
+#: dahuconcept-store-credit.php:175
 msgid "Always traceable"
 msgstr "Toujours traçable"
 
-#: includes/class-ubac-credit-admin.php:278
+#: includes/class-ubac-credit-admin.php:315
 msgid "Amount used"
 msgstr "Montant utilisé"
 
-#: ubac-credit.php:172
+#: dahuconcept-store-credit.php:172
 msgid "Applied like a payment, not a coupon."
 msgstr "Appliqué comme un paiement, pas comme un code promo."
 
-#: includes/class-ubac-credit-admin.php:108
+#: includes/class-ubac-credit-admin.php:135
 msgid "Automatically carry the remaining balance forward after payment"
 msgstr "Reporter automatiquement le solde restant après le paiement"
 
-#: ubac-credit.php:96
+#: dahuconcept-store-credit.php:96
 msgid "By Hugo Vial-Jaime — Dahu-Concept"
 msgstr "Par Hugo Vial-Jaime — Dahu-Concept"
 
-#: includes/class-ubac-credit-admin.php:188
+#: includes/class-ubac-credit-admin.php:225
 msgid "Code"
 msgstr "Code"
 
-#: ubac-credit.php:192
+#: dahuconcept-store-credit.php:192
 msgid "Coupons become a balance"
 msgstr "Les bons deviennent un solde"
 
-#: includes/class-ubac-credit-admin.php:179
+#: includes/class-ubac-credit-admin.php:216
 msgid "Create a coupon"
 msgstr "Créer un code promo"
 
-#: includes/class-ubac-credit-admin.php:95 ubac-credit.php:139
+#: dahuconcept-store-credit.php:139 includes/class-ubac-credit-admin.php:122
 msgid "Credit a customer can spend at the checkout, and where it came from."
 msgstr "Un avoir que le client dépense au paiement, et d’où il vient."
 
-#: includes/class-ubac-credit-admin.php:189
+#: includes/class-ubac-credit-admin.php:226
 msgid "Current balance"
 msgstr "Solde actuel"
 
-#: includes/class-ubac-credit-admin.php:276
+#: includes/class-ubac-credit-admin.php:51
+msgid "DahuConcept Store Credit"
+msgstr "DahuConcept Store Credit"
+
+#: includes/class-ubac-credit-admin.php:287
+msgid "DahuConcept Store Credit history"
+msgstr "Historique des avoirs"
+
+#: dahuconcept-store-credit.php:56
+msgid "DahuConcept Store Credit requires WooCommerce."
+msgstr "DahuConcept Store Credit nécessite WooCommerce."
+
+#. translators: 1: formatted amount, 2: coupon code, 3: percentage of the order refunded */
+#: includes/class-ubac-credit-core.php:2325
+msgid "DahuConcept Store Credit: %1$s returned to %2$s, the credit's share of a partial refund covering %3$s of this order."
+msgstr "DahuConcept Store Credit : %1$s rendus à %2$s, la part de l’avoir dans un remboursement partiel portant sur %3$s de cette commande."
+
+#. translators: %s: coupon code */
+#: includes/class-ubac-credit-core.php:1241
+msgid "DahuConcept Store Credit: could not restore “%s”, coupon not found."
+msgstr "DahuConcept Store Credit : impossible de recréditer « %s », code promo introuvable."
+
+#. translators: %s: coupon code */
+#: includes/class-ubac-credit-core.php:719
+msgid "DahuConcept Store Credit: coupon “%s” no longer exists; nothing was processed."
+msgstr "DahuConcept Store Credit : le code promo « %s » n’existe plus, rien n’a été traité."
+
+#: includes/class-ubac-credit-admin.php:313
 msgid "Date"
 msgstr "Date"
 
-#: ubac-credit.php:203
+#: dahuconcept-store-credit.php:203
 msgid "Days added to the expiry date on each partial use."
 msgstr "Jours ajoutés à la date d'expiration à chaque utilisation partielle."
 
-#: includes/class-ubac-credit-admin.php:116
+#: includes/class-ubac-credit-admin.php:143
 msgid "Days added to the expiry date on each partial use. 0 leaves the expiry date alone."
 msgstr "Jours ajoutés à la date d’expiration à chaque utilisation partielle. 0 laisse la date inchangée."
 
-#: ubac-credit.php:160
+#: includes/class-ubac-credit-admin.php:151
+msgid "Delete this plugin's data when the plugin is deleted"
+msgstr "Supprimer les données de cette extension quand l’extension est supprimée"
+
+#: dahuconcept-store-credit.php:160
 msgid "Done"
 msgstr "Terminé"
 
-#: includes/class-ubac-credit-admin.php:191
+#: includes/class-ubac-credit-admin.php:228
 msgid "Email restriction"
 msgstr "Restriction par e-mail"
 
-#: includes/class-ubac-credit-admin.php:104
-msgid "Enable Ubac Store Credit"
-msgstr "Activer Ubac Store Credit"
+#: includes/class-ubac-credit-admin.php:131
+msgid "Enable DahuConcept Store Credit"
+msgstr "Activer DahuConcept Store Credit"
 
-#: ubac-credit.php:176
+#: dahuconcept-store-credit.php:176
 msgid "Every movement says who made it and why."
 msgstr "Chaque mouvement dit qui l’a fait et pourquoi."
 
-#: includes/class-ubac-credit-admin.php:190
+#: includes/class-ubac-credit-admin.php:227
 msgid "Expiry date"
 msgstr "Date d’expiration"
 
-#: ubac-credit.php:202
+#: dahuconcept-store-credit.php:202
 msgid "Extend the validity"
 msgstr "Prolongez la validité"
 
-#: includes/class-ubac-credit-admin.php:279
+#: includes/class-ubac-credit-admin.php:316
 msgid "New balance"
 msgstr "Nouveau solde"
 
-#: ubac-credit.php:159
+#: dahuconcept-store-credit.php:159
 msgid "Next"
 msgstr "Suivant"
 
-#: includes/class-ubac-credit-admin.php:268
+#: includes/class-ubac-credit-admin.php:305
 msgid "No history yet."
 msgstr "Aucun historique pour l’instant."
 
-#: includes/class-ubac-credit-admin.php:177
+#: includes/class-ubac-credit-admin.php:214
 msgid "No store credit recorded yet. A fixed-cart coupon ticked as store credit appears here."
 msgstr "Aucun avoir enregistré pour l’instant. Un code promo à montant fixe coché comme avoir apparaît ici."
 
-#: includes/class-ubac-credit-admin.php:277
+#: includes/class-ubac-credit-admin.php:153
+msgid "Off, and worth leaving off. What goes is every credit balance and the history of where each one came from — money owed to customers. Deleting the plugin is usually a step in reinstalling it."
+msgstr "Décoché, et autant le laisser ainsi. Ce qui part, c’est chaque solde d’avoir et l’historique de sa provenance — de l’argent dû aux clients. Supprimer l’extension est le plus souvent une étape pour la réinstaller."
+
+#: includes/class-ubac-credit-admin.php:314
 msgid "Order"
 msgstr "Commande"
 
-#: ubac-credit.php:101
+#: dahuconcept-store-credit.php:101
 msgid "Plugin website"
 msgstr "Site de l’extension"
 
-#: ubac-credit.php:75
+#: dahuconcept-store-credit.php:75
 msgid "Settings"
 msgstr "Réglages"
 
-#: ubac-credit.php:161
+#: dahuconcept-store-credit.php:161
 msgid "Skip"
 msgstr "Passer"
 
-#: ubac-credit.php:171
+#: dahuconcept-store-credit.php:171
 msgid "Spent at the checkout"
 msgstr "Dépensé au paiement"
 
-#: includes/class-ubac-credit-admin.php:32 includes/class-ubac-credit-admin.php:94 ubac-credit.php:138
+#: dahuconcept-store-credit.php:138 includes/class-ubac-credit-admin.php:52 includes/class-ubac-credit-admin.php:121
 msgid "Store credit"
 msgstr "Avoir"
 
@@ -216,7 +251,7 @@ msgstr "Avoir %s : cette commande a été marquée remboursée, mais rien de ce 
 msgid "Store credit (balance carries forward)"
 msgstr "Avoir (le solde est reporté)"
 
-#: ubac-credit.php:197
+#: dahuconcept-store-credit.php:197
 msgid "Switch it on or off"
 msgstr "Activez ou désactivez"
 
@@ -225,58 +260,35 @@ msgid "The balance of this store credit is currently too low, or already reserve
 msgstr "Le solde de cet avoir est trop faible, ou déjà réservé par une autre commande en attente de paiement."
 
 #: includes/class-ubac-credit-core.php:252
-msgid "This coupon is marked as store credit but is not of the “Fixed cart discount” type. Ubac Store Credit will ignore it."
-msgstr "Ce code promo est marqué comme avoir mais n’est pas de type « Remise fixe sur le panier ». Ubac Store Credit l’ignorera."
+msgid "This coupon is marked as store credit but is not of the “Fixed cart discount” type. DahuConcept Store Credit will ignore it."
+msgstr "Ce code promo est marqué comme avoir mais n’est pas de type « Remise fixe sur le panier ». DahuConcept Store Credit l’ignorera."
 
-#: includes/class-ubac-credit-admin.php:263
+#: includes/class-ubac-credit-admin.php:300
 msgid "This coupon is not marked as store credit."
 msgstr "Ce code promo n’est pas marqué comme avoir."
 
-#: includes/class-ubac-credit-admin.php:31
-msgid "Ubac Store Credit"
-msgstr "Ubac Store Credit"
+#: includes/class-ubac-credit-admin.php:147
+msgid "Uninstalling"
+msgstr "Désinstallation"
 
-#: includes/class-ubac-credit-admin.php:250
-msgid "Ubac Store Credit history"
-msgstr "Historique des avoirs"
-
-#: ubac-credit.php:56
-msgid "Ubac Store Credit requires WooCommerce."
-msgstr "Ubac Store Credit nécessite WooCommerce."
-
-#. translators: 1: formatted amount, 2: coupon code, 3: percentage of the order refunded */
-#: includes/class-ubac-credit-core.php:2325
-msgid "Ubac Store Credit: %1$s returned to %2$s, the credit's share of a partial refund covering %3$s of this order."
-msgstr "Ubac Avoir : %1$s rendus à %2$s, la part de l’avoir dans un remboursement partiel portant sur %3$s de cette commande."
-
-#. translators: %s: coupon code */
-#: includes/class-ubac-credit-core.php:1241
-msgid "Ubac Store Credit: could not restore “%s”, coupon not found."
-msgstr "Ubac Store Credit : impossible de recréditer « %s », code promo introuvable."
-
-#. translators: %s: coupon code */
-#: includes/class-ubac-credit-core.php:719
-msgid "Ubac Store Credit: coupon “%s” no longer exists; nothing was processed."
-msgstr "Ubac Store Credit : le code promo « %s » n’existe plus, rien n’a été traité."
-
-#: includes/class-ubac-credit-admin.php:204
+#: includes/class-ubac-credit-admin.php:241
 msgid "Unlimited"
 msgstr "Illimitée"
 
-#: includes/class-ubac-credit-admin.php:113
+#: includes/class-ubac-credit-admin.php:140
 msgid "Validity extension"
 msgstr "Prolongation de validité"
 
 #. translators: %s: plugin version number. */
-#: ubac-credit.php:90
+#: dahuconcept-store-credit.php:90
 msgid "Version %s"
 msgstr "Version %s"
 
-#: ubac-credit.php:193
+#: dahuconcept-store-credit.php:193
 msgid "What is left on a coupon stays available for the next order."
 msgstr "Ce qui reste sur un bon reste disponible pour la commande suivante."
 
-#: ubac-credit.php:198
+#: dahuconcept-store-credit.php:198
 msgid "When on, the remaining balance is carried forward after payment."
 msgstr "Activé, le solde restant est reporté après le paiement."
 
@@ -284,11 +296,11 @@ msgstr "Activé, le solde restant est reporté après le paiement."
 msgid "When ticked, whatever is left of this fixed-cart coupon is carried forward after payment instead of being lost."
 msgstr "Si la case est cochée, ce qui reste de ce code promo à montant fixe est reporté après le paiement au lieu d’être perdu."
 
-#: ubac-credit.php:163
+#: dahuconcept-store-credit.php:163
 msgid "You are not allowed to view this page."
 msgstr "Vous n’avez pas l’autorisation de voir cette page."
 
-#: ubac-credit.php:162
+#: dahuconcept-store-credit.php:162
 msgid "of"
 msgstr "sur"
 

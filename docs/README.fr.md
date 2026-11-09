@@ -1,4 +1,4 @@
-# Ubac Store Credit
+# DahuConcept Store Credit
 
 Transforme un code promo WooCommerce à montant fixe en véritable avoir : ce qui
 reste est reporté au lieu d'être perdu.

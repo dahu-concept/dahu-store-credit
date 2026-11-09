@@ -1,4 +1,4 @@
-# Ubac Store Credit
+# DahuConcept Store Credit
 
 Turns a WooCommerce fixed-cart coupon into real store credit: whatever is left
 over is carried forward instead of being lost.

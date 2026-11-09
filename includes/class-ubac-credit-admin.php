@@ -48,8 +48,8 @@ class Ubac_Credit_Admin {
 	public function add_settings_page() {
 		add_submenu_page(
 			'woocommerce',
-			__( 'Ubac Store Credit', 'ubac-credit' ),
-			__( 'Store credit', 'ubac-credit' ),
+			__( 'DahuConcept Store Credit', 'dahuconcept-store-credit' ),
+			__( 'Store credit', 'dahuconcept-store-credit' ),
 			'manage_woocommerce',
 			'ubac-credit',
 			array( $this, 'render_settings_page' )
@@ -118,8 +118,8 @@ class Ubac_Credit_Admin {
 		?>
 		<div class="wrap ubac-ui">
 			<div class="ubac-ui-head">
-				<h1 class="ubac-ui-head__title"><?php esc_html_e( 'Store credit', 'ubac-credit' ); ?></h1>
-				<p class="ubac-ui-head__sub"><?php esc_html_e( 'Credit a customer can spend at the checkout, and where it came from.', 'ubac-credit' ); ?></p>
+				<h1 class="ubac-ui-head__title"><?php esc_html_e( 'Store credit', 'dahuconcept-store-credit' ); ?></h1>
+				<p class="ubac-ui-head__sub"><?php esc_html_e( 'Credit a customer can spend at the checkout, and where it came from.', 'dahuconcept-store-credit' ); ?></p>
 			</div>
 
 			<hr class="wp-header-end">
@@ -128,29 +128,29 @@ class Ubac_Credit_Admin {
 				<div class="ubac-ui-card">
 				<table class="form-table">
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Enable Ubac Store Credit', 'ubac-credit' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Enable DahuConcept Store Credit', 'dahuconcept-store-credit' ); ?></th>
 						<td>
 							<label>
 								<input type="checkbox" name="ubac_credit_settings[enabled]" value="yes" <?php checked( $enabled, 'yes' ); ?> />
-								<?php esc_html_e( 'Automatically carry the remaining balance forward after payment', 'ubac-credit' ); ?>
+								<?php esc_html_e( 'Automatically carry the remaining balance forward after payment', 'dahuconcept-store-credit' ); ?>
 							</label>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Validity extension', 'ubac-credit' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Validity extension', 'dahuconcept-store-credit' ); ?></th>
 						<td>
 							<input type="number" min="0" step="1" name="ubac_credit_settings[extension_days]" value="<?php echo esc_attr( $extension_days ); ?>" class="small-text" />
-							<p class="description"><?php esc_html_e( 'Days added to the expiry date on each partial use. 0 leaves the expiry date alone.', 'ubac-credit' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Days added to the expiry date on each partial use. 0 leaves the expiry date alone.', 'dahuconcept-store-credit' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Uninstalling', 'ubac-credit' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Uninstalling', 'dahuconcept-store-credit' ); ?></th>
 						<td>
 							<label>
 								<input type="checkbox" name="ubac_credit_settings[delete_data_on_uninstall]" value="yes" <?php checked( $delete_on_uninstall, 'yes' ); ?> />
-								<?php esc_html_e( "Delete this plugin's data when the plugin is deleted", 'ubac-credit' ); ?>
+								<?php esc_html_e( "Delete this plugin's data when the plugin is deleted", 'dahuconcept-store-credit' ); ?>
 							</label>
-							<p class="description"><?php esc_html_e( 'Off, and worth leaving off. What goes is every credit balance and the history of where each one came from — money owed to customers. Deleting the plugin is usually a step in reinstalling it.', 'ubac-credit' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Off, and worth leaving off. What goes is every credit balance and the history of where each one came from — money owed to customers. Deleting the plugin is usually a step in reinstalling it.', 'dahuconcept-store-credit' ); ?></p>
 						</td>
 					</tr>
 				</table>
@@ -160,7 +160,7 @@ class Ubac_Credit_Admin {
 
 			<div class="ubac-ui-card" id="ubac-credit-list">
 				<div class="ubac-ui-card__head">
-					<h2 class="ubac-ui-card__title"><?php esc_html_e( 'Active store credits', 'ubac-credit' ); ?></h2>
+					<h2 class="ubac-ui-card__title"><?php esc_html_e( 'Active store credits', 'dahuconcept-store-credit' ); ?></h2>
 				</div>
 				<?php $this->render_coupons_table(); ?>
 			</div>
@@ -211,9 +211,9 @@ class Ubac_Credit_Admin {
 		if ( ! $query->have_posts() ) {
 			printf(
 				'<p class="ubac-ui-hint">%s</p><p><a class="ubac-ui-btn" href="%s">%s</a></p>',
-				esc_html__( 'No store credit recorded yet. A fixed-cart coupon ticked as store credit appears here.', 'ubac-credit' ),
+				esc_html__( 'No store credit recorded yet. A fixed-cart coupon ticked as store credit appears here.', 'dahuconcept-store-credit' ),
 				esc_url( admin_url( 'post-new.php?post_type=shop_coupon' ) ),
-				esc_html__( 'Create a coupon', 'ubac-credit' )
+				esc_html__( 'Create a coupon', 'dahuconcept-store-credit' )
 			);
 			return;
 		}
@@ -222,10 +222,10 @@ class Ubac_Credit_Admin {
 		<table class="ubac-ui-table">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Code', 'ubac-credit' ); ?></th>
-					<th><?php esc_html_e( 'Current balance', 'ubac-credit' ); ?></th>
-					<th><?php esc_html_e( 'Expiry date', 'ubac-credit' ); ?></th>
-					<th><?php esc_html_e( 'Email restriction', 'ubac-credit' ); ?></th>
+					<th><?php esc_html_e( 'Code', 'dahuconcept-store-credit' ); ?></th>
+					<th><?php esc_html_e( 'Current balance', 'dahuconcept-store-credit' ); ?></th>
+					<th><?php esc_html_e( 'Expiry date', 'dahuconcept-store-credit' ); ?></th>
+					<th><?php esc_html_e( 'Email restriction', 'dahuconcept-store-credit' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -238,7 +238,7 @@ class Ubac_Credit_Admin {
 					<tr>
 						<td><?php echo esc_html( $coupon->get_code() ); ?></td>
 						<td><?php echo wp_kses_post( wc_price( $coupon->get_amount() ) ); ?></td>
-						<td><?php echo $expires ? esc_html( $expires->date_i18n( 'd/m/Y' ) ) : esc_html__( 'Unlimited', 'ubac-credit' ); ?></td>
+						<td><?php echo $expires ? esc_html( $expires->date_i18n( 'd/m/Y' ) ) : esc_html__( 'Unlimited', 'dahuconcept-store-credit' ); ?></td>
 						<td><?php echo $emails ? esc_html( implode( ', ', $emails ) ) : '—'; ?></td>
 					</tr>
 				<?php endforeach; ?>
@@ -284,7 +284,7 @@ class Ubac_Credit_Admin {
 	public function add_history_metabox() {
 		add_meta_box(
 			'ubac_credit_history',
-			__( 'Ubac Store Credit history', 'ubac-credit' ),
+			__( 'DahuConcept Store Credit history', 'dahuconcept-store-credit' ),
 			array( $this, 'render_history_metabox' ),
 			'shop_coupon',
 			'normal',
@@ -297,12 +297,12 @@ class Ubac_Credit_Admin {
 		$history = $coupon->get_meta( '_ubac_credit_history' );
 
 		if ( 'yes' !== $coupon->get_meta( '_ubac_credit' ) ) {
-			echo '<p>' . esc_html__( 'This coupon is not marked as store credit.', 'ubac-credit' ) . '</p>';
+			echo '<p>' . esc_html__( 'This coupon is not marked as store credit.', 'dahuconcept-store-credit' ) . '</p>';
 			return;
 		}
 
 		if ( empty( $history ) || ! is_array( $history ) ) {
-			echo '<p>' . esc_html__( 'No history yet.', 'ubac-credit' ) . '</p>';
+			echo '<p>' . esc_html__( 'No history yet.', 'dahuconcept-store-credit' ) . '</p>';
 			return;
 		}
 
@@ -310,10 +310,10 @@ class Ubac_Credit_Admin {
 		<table class="ubac-ui-table">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Date', 'ubac-credit' ); ?></th>
-					<th><?php esc_html_e( 'Order', 'ubac-credit' ); ?></th>
-					<th><?php esc_html_e( 'Amount used', 'ubac-credit' ); ?></th>
-					<th><?php esc_html_e( 'New balance', 'ubac-credit' ); ?></th>
+					<th><?php esc_html_e( 'Date', 'dahuconcept-store-credit' ); ?></th>
+					<th><?php esc_html_e( 'Order', 'dahuconcept-store-credit' ); ?></th>
+					<th><?php esc_html_e( 'Amount used', 'dahuconcept-store-credit' ); ?></th>
+					<th><?php esc_html_e( 'New balance', 'dahuconcept-store-credit' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>

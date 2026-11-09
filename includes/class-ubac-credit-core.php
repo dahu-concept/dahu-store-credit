@@ -241,15 +241,15 @@ class Ubac_Credit_Core {
 		woocommerce_wp_checkbox(
 			array(
 				'id'          => '_ubac_credit',
-				'label'       => __( 'Store credit (balance carries forward)', 'ubac-credit' ),
-				'description' => __( 'When ticked, whatever is left of this fixed-cart coupon is carried forward after payment instead of being lost.', 'ubac-credit' ),
+				'label'       => __( 'Store credit (balance carries forward)', 'dahuconcept-store-credit' ),
+				'description' => __( 'When ticked, whatever is left of this fixed-cart coupon is carried forward after payment instead of being lost.', 'dahuconcept-store-credit' ),
 				'desc_tip'    => true,
 			)
 		);
 		echo '</div>';
 
 		if ( $coupon_id && 'yes' === $coupon->get_meta( '_ubac_credit' ) && 'fixed_cart' !== $coupon->get_discount_type() ) {
-			echo '<div class="notice notice-warning inline"><p>' . esc_html__( 'This coupon is marked as store credit but is not of the “Fixed cart discount” type. Ubac Store Credit will ignore it.', 'ubac-credit' ) . '</p></div>';
+			echo '<div class="notice notice-warning inline"><p>' . esc_html__( 'This coupon is marked as store credit but is not of the “Fixed cart discount” type. DahuConcept Store Credit will ignore it.', 'dahuconcept-store-credit' ) . '</p></div>';
 		}
 	}
 
@@ -284,7 +284,7 @@ class Ubac_Credit_Core {
 	}
 
 	/**
-	 * Is this coupon handled by Ubac Store Credit?
+	 * Is this coupon handled by DahuConcept Store Credit?
 	 *
 	 * The meta is read straight from the database, bypassing the object cache:
 	 * a WC_Coupon left stale after a recent save would otherwise produce a
@@ -490,7 +490,7 @@ class Ubac_Credit_Core {
 
 	public function customize_coupon_error( $err, $err_code, $coupon ) {
 		if ( 100 === $err_code && $coupon instanceof WC_Coupon && $this->is_ubac_credit_coupon( $coupon ) ) {
-			return __( 'The balance of this store credit is currently too low, or already reserved by another order awaiting payment.', 'ubac-credit' );
+			return __( 'The balance of this store credit is currently too low, or already reserved by another order awaiting payment.', 'dahuconcept-store-credit' );
 		}
 		return $err;
 	}
@@ -505,7 +505,7 @@ class Ubac_Credit_Core {
 		$this->log( "process_order() called for order #{$order_id}" );
 
 		if ( ! $this->is_enabled() ) {
-			$this->log( 'Ubac Store Credit is switched off in the settings; nothing processed.' );
+			$this->log( 'DahuConcept Store Credit is switched off in the settings; nothing processed.' );
 			return;
 		}
 
@@ -664,7 +664,7 @@ class Ubac_Credit_Core {
 					$this->log( "Order #{$order_id} carries an unreadable charge record for credit {$code}; skipping it." );
 					$this->say_once( $order, 'skipped-unreadable-' . $already, sprintf(
 						/* translators: %s: coupon code */
-						__( 'Store credit %s: this order carries a charge record that cannot be read, so the credit was left alone. Check the credit before treating this order as paid by it.', 'ubac-credit' ),
+						__( 'Store credit %s: this order carries a charge record that cannot be read, so the credit was left alone. Check the credit before treating this order as paid by it.', 'dahuconcept-store-credit' ),
 						$code
 					) );
 					continue;
@@ -688,7 +688,7 @@ class Ubac_Credit_Core {
 					if ( $replaced ) {
 						$this->say_once( $order, 'skipped-replaced-' . $already, sprintf(
 							/* translators: %s: coupon code */
-							__( 'Store credit %s: this order was charged on a credit that has since been deleted and recreated under the same code, so the credit now carrying that code was left alone. It is not the one that paid for this order.', 'ubac-credit' ),
+							__( 'Store credit %s: this order was charged on a credit that has since been deleted and recreated under the same code, so the credit now carrying that code was left alone. It is not the one that paid for this order.', 'dahuconcept-store-credit' ),
 							$code
 						) );
 						continue;
@@ -697,7 +697,7 @@ class Ubac_Credit_Core {
 					if ( $unmatched ) {
 						$this->say_once( $order, 'skipped-unmatched-' . $already, sprintf(
 							/* translators: %s: coupon code */
-							__( 'Store credit %s: a charge is recorded against this order id, but it could not be matched to this order, so the credit was left alone. Check whether this order was really paid by that credit.', 'ubac-credit' ),
+							__( 'Store credit %s: a charge is recorded against this order id, but it could not be matched to this order, so the credit was left alone. Check whether this order was really paid by that credit.', 'dahuconcept-store-credit' ),
 							$code
 						) );
 						continue;
@@ -705,7 +705,7 @@ class Ubac_Credit_Core {
 
 					$this->say_once( $order, 'skipped-' . $already, sprintf(
 						/* translators: %s: coupon code */
-						__( 'Store credit %s: this order is already recorded as charged on that credit, so it was not charged again.', 'ubac-credit' ),
+						__( 'Store credit %s: this order is already recorded as charged on that credit, so it was not charged again.', 'dahuconcept-store-credit' ),
 						$code
 					) );
 					continue;
@@ -716,7 +716,7 @@ class Ubac_Credit_Core {
 				$order->add_order_note(
 					sprintf(
 						/* translators: %s: coupon code */
-						__( 'Ubac Store Credit: coupon “%s” no longer exists; nothing was processed.', 'ubac-credit' ),
+						__( 'DahuConcept Store Credit: coupon “%s” no longer exists; nothing was processed.', 'dahuconcept-store-credit' ),
 						$code
 					)
 				);
@@ -836,7 +836,7 @@ class Ubac_Credit_Core {
 			if ( null !== $was && $was_amount > 0 && '' !== $was_key && '' !== $this_key && $was_key !== $this_key ) {
 				$this->say_once( $order, 'displaced-' . $already, sprintf(
 					/* translators: 1: coupon code, 2: formatted amount */
-					__( 'Store credit %1$s: this order id already carried a charge of %2$s made by a different order, which no longer exists. That record has been replaced by this one.', 'ubac-credit' ),
+					__( 'Store credit %1$s: this order id already carried a charge of %2$s made by a different order, which no longer exists. That record has been replaced by this one.', 'dahuconcept-store-credit' ),
 					$code,
 					wc_price( $was_amount )
 				) );
@@ -1029,7 +1029,7 @@ class Ubac_Credit_Core {
 				$order->add_order_note(
 					sprintf(
 						/* translators: 1: coupon code, 2: consumed amount, 3: remaining balance */
-						__( 'Store credit %1$s: %2$s used, %3$s carried forward.', 'ubac-credit' ),
+						__( 'Store credit %1$s: %2$s used, %3$s carried forward.', 'dahuconcept-store-credit' ),
 						$code,
 						wc_price( $consumed ),
 						wc_price( $remaining )
@@ -1039,7 +1039,7 @@ class Ubac_Credit_Core {
 				$order->add_order_note(
 					sprintf(
 						/* translators: %s: coupon code */
-						__( 'Store credit %s fully used.', 'ubac-credit' ),
+						__( 'Store credit %s fully used.', 'dahuconcept-store-credit' ),
 						$code
 					)
 				);
@@ -1238,7 +1238,7 @@ class Ubac_Credit_Core {
 				if ( ! empty( $claim['recorded'] ) ) {
 					$this->say_once( $order, 'notfound-' . wc_format_coupon_code( $code ), sprintf(
 						/* translators: %s: coupon code */
-						__( 'Ubac Store Credit: could not restore “%s”, coupon not found.', 'ubac-credit' ),
+						__( 'DahuConcept Store Credit: could not restore “%s”, coupon not found.', 'dahuconcept-store-credit' ),
 						$code
 					) );
 				}
@@ -1302,7 +1302,7 @@ class Ubac_Credit_Core {
 				 */
 				$this->say_once( $order, 'refused-' . wc_format_coupon_code( $code ), sprintf(
 					/* translators: %s: coupon code */
-					__( 'Store credit %s: this order is already recorded as refunded on that credit, so it was not returned twice.', 'ubac-credit' ),
+					__( 'Store credit %s: this order is already recorded as refunded on that credit, so it was not returned twice.', 'dahuconcept-store-credit' ),
 					$code
 				) );
 				continue;
@@ -1390,7 +1390,7 @@ class Ubac_Credit_Core {
 
 				$this->say_once( $order, 'unmatched-' . $key, sprintf(
 					/* translators: %s: coupon code */
-					__( 'Store credit %s: a charge is recorded against this order id but cannot be tied to this order, so nothing was returned automatically — returning it could hand over an amount another order took. Check whether this order was paid by that credit and refund it by hand if so.', 'ubac-credit' ),
+					__( 'Store credit %s: a charge is recorded against this order id but cannot be tied to this order, so nothing was returned automatically — returning it could hand over an amount another order took. Check whether this order was paid by that credit and refund it by hand if so.', 'dahuconcept-store-credit' ),
 					$code
 				) );
 				continue;
@@ -1452,7 +1452,7 @@ class Ubac_Credit_Core {
 			if ( $this->given_damaged( $given, $order_id ) ) {
 				$this->say_once( $order, 'given-damaged-' . $key, sprintf(
 					/* translators: %s: coupon code */
-					__( 'Store credit %s: the record of what had already been returned on this order could not be read, so it was treated as nothing returned yet. Check that credit\'s balance and its history.', 'ubac-credit' ),
+					__( 'Store credit %s: the record of what had already been returned on this order could not be read, so it was treated as nothing returned yet. Check that credit\'s balance and its history.', 'dahuconcept-store-credit' ),
 					$code
 				) );
 			}
@@ -1514,7 +1514,7 @@ class Ubac_Credit_Core {
 				if ( ! is_numeric( $recorded ) || ! is_finite( (float) $recorded ) ) {
 					$this->say_once( $order, 'unreadable-' . $key, sprintf(
 						/* translators: %s: coupon code */
-						__( 'Store credit %s: this order claims a charge on that credit but the amount recorded cannot be read, and the order no longer carries the coupon line to fall back on, so nothing was returned. Check the credit and refund it by hand if something is owed.', 'ubac-credit' ),
+						__( 'Store credit %s: this order claims a charge on that credit but the amount recorded cannot be read, and the order no longer carries the coupon line to fall back on, so nothing was returned. Check the credit and refund it by hand if something is owed.', 'dahuconcept-store-credit' ),
 						$code
 					) );
 				}
@@ -1708,7 +1708,7 @@ class Ubac_Credit_Core {
 			if ( $replaced ) {
 				$this->say_once( $order, 'replaced-' . $key, sprintf(
 					/* translators: %s: coupon code */
-					__( 'Store credit %s: the credit charged on this order has been deleted and recreated since, so what was taken has been returned to the new one. Check its balance — it may now hold more than it ever lent.', 'ubac-credit' ),
+					__( 'Store credit %s: the credit charged on this order has been deleted and recreated since, so what was taken has been returned to the new one. Check its balance — it may now hold more than it ever lent.', 'dahuconcept-store-credit' ),
 					$code
 				) );
 			}
@@ -1716,7 +1716,7 @@ class Ubac_Credit_Core {
 			if ( $say_expired ) {
 				$this->say_once( $order, 'expired-' . $key, sprintf(
 					/* translators: %s: coupon code */
-					__( 'Store credit %s: the amount was returned, but that credit has expired and cannot be spent as it stands. Give it a new expiry date for the customer to use it.', 'ubac-credit' ),
+					__( 'Store credit %s: the amount was returned, but that credit has expired and cannot be spent as it stands. Give it a new expiry date for the customer to use it.', 'dahuconcept-store-credit' ),
 					$code
 				) );
 			}
@@ -1743,7 +1743,7 @@ class Ubac_Credit_Core {
 			if ( $port_seul ) {
 				$this->say_once( $order, 'port-seul-' . $key, sprintf(
 					/* translators: %s: coupon code */
-					__( 'Store credit %s: this order was marked refunded, but nothing that was actually refunded covers any goods — only shipping, fees or an amount with no line attached. The full amount has been returned to the credit anyway. Check that the goods really came back.', 'ubac-credit' ),
+					__( 'Store credit %s: this order was marked refunded, but nothing that was actually refunded covers any goods — only shipping, fees or an amount with no line attached. The full amount has been returned to the credit anyway. Check that the goods really came back.', 'dahuconcept-store-credit' ),
 					$code
 				) );
 			}
@@ -1753,7 +1753,7 @@ class Ubac_Credit_Core {
 			$order->add_order_note(
 				sprintf(
 					/* translators: 1: coupon code, 2: restored amount */
-					__( 'Store credit %1$s: order cancelled or refunded, %2$s returned to the coupon.', 'ubac-credit' ),
+					__( 'Store credit %1$s: order cancelled or refunded, %2$s returned to the coupon.', 'dahuconcept-store-credit' ),
 					$code,
 					wc_price( $give_back )
 				)
@@ -2216,7 +2216,7 @@ class Ubac_Credit_Core {
 			if ( $unmatched ) {
 				$this->say_once( $order, 'unmatched-' . $key, sprintf(
 					/* translators: %s: coupon code */
-					__( 'Store credit %s: a charge is recorded against this order id but cannot be tied to this order, so nothing was returned automatically — returning it could hand over an amount another order took. Check whether this order was paid by that credit and refund it by hand if so.', 'ubac-credit' ),
+					__( 'Store credit %s: a charge is recorded against this order id but cannot be tied to this order, so nothing was returned automatically — returning it could hand over an amount another order took. Check whether this order was paid by that credit and refund it by hand if so.', 'dahuconcept-store-credit' ),
 					$code
 				) );
 				continue;
@@ -2243,7 +2243,7 @@ class Ubac_Credit_Core {
 			if ( $this->given_damaged( $given, $order_id ) ) {
 				$this->say_once( $order, 'given-damaged-' . $key, sprintf(
 					/* translators: %s: coupon code */
-					__( 'Store credit %s: the record of what had already been returned on this order could not be read, so it was treated as nothing returned yet. Check that credit\'s balance and its history.', 'ubac-credit' ),
+					__( 'Store credit %s: the record of what had already been returned on this order could not be read, so it was treated as nothing returned yet. Check that credit\'s balance and its history.', 'dahuconcept-store-credit' ),
 					$code
 				) );
 			}
@@ -2322,7 +2322,7 @@ class Ubac_Credit_Core {
 			$order->add_order_note(
 				sprintf(
 					/* translators: 1: formatted amount, 2: coupon code, 3: percentage of the order refunded */
-					__( 'Ubac Store Credit: %1$s returned to %2$s, the credit\'s share of a partial refund covering %3$s of this order.', 'ubac-credit' ),
+					__( 'DahuConcept Store Credit: %1$s returned to %2$s, the credit\'s share of a partial refund covering %3$s of this order.', 'dahuconcept-store-credit' ),
 					wc_price( $delta ),
 					$code,
 					$this->part_lisible( $part )
@@ -2332,7 +2332,7 @@ class Ubac_Credit_Core {
 			if ( $replaced ) {
 				$this->say_once( $order, 'replaced-' . $key, sprintf(
 					/* translators: %s: coupon code */
-					__( 'Store credit %s: the credit charged on this order has been deleted and recreated since, so what was taken has been returned to the new one. Check its balance — it may now hold more than it ever lent.', 'ubac-credit' ),
+					__( 'Store credit %s: the credit charged on this order has been deleted and recreated since, so what was taken has been returned to the new one. Check its balance — it may now hold more than it ever lent.', 'dahuconcept-store-credit' ),
 					$code
 				) );
 			}
