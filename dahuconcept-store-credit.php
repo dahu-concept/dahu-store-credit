@@ -125,7 +125,7 @@ require_once UBAC_CREDIT_PATH . 'includes/ubac-welcome.php';
 register_activation_hook(
 	__FILE__,
 	static function () {
-		Ubac_Welcome::mark_activated( 'ubac-credit' );
+		Ubac_Welcome::mark_activated( 'dahuconcept-store-credit' );
 	}
 );
 
@@ -134,12 +134,12 @@ add_action(
 	static function () {
 		Ubac_Welcome::register(
 			array(
-				'slug'       => 'ubac-credit',
+				'slug'       => 'dahuconcept-store-credit',
 				'name'       => __( 'Store credit', 'dahuconcept-store-credit' ),
 				'tagline'    => __( 'Credit a customer can spend at the checkout, and where it came from.', 'dahuconcept-store-credit' ),
 				'file'       => UBAC_CREDIT_FILE,
 				'version'    => UBAC_CREDIT_VERSION,
-				'textdomain' => 'ubac-credit',
+				'textdomain' => 'dahuconcept-store-credit',
 				'mark'       => array(
 					'view'  => '0 0 112 112',
 					'paths' => array(
