@@ -1,6 +1,6 @@
 === DahuConcept Store Credit for WooCommerce ===
 Contributors: dahuconcept
-Tags: gift card, store credit, coupons, refunds, vouchers
+Tags: gift card, store credit, coupons, refunds, woocommerce
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
